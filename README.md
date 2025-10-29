@@ -1,14 +1,14 @@
-# CODE
+# kode
 
 &ensp;
 
 <p align="center">
-  <img src="docs/logo.png" alt="Code Logo" width="400">
+  <img src="docs/logo.png" alt="Kode Logo" width="400">
 </p>
 
 &ensp;
 
-**Code** is a fast, local coding agent for your terminal. It's a community-driven fork of `openai/codex` focused on real developer ergonomics: Browser integration, multi-agents, theming, and reasoning control — all while staying compatible with upstream.
+**kode** is a fast, local coding agent for your terminal. It's a community-driven fork of `openai/codex` focused on real developer ergonomics: Browser integration, multi-agents, theming, and reasoning control — all while staying compatible with upstream.
 
 &ensp;
 ## What's new in v0.4.0 (October 26, 2025)
@@ -104,27 +104,27 @@ kode demonstrates key patterns in modern AI agent design:
 ### Run
 
 ```bash
-npx -y @just-every/code
+npx -y @just-every/kode
 ```
 
 ### Install & Run
 
 ```bash
-npm install -g @just-every/code
-code // or `coder` if you're using VS Code
+npm install -g @just-every/kode
+kode // or `koder` if you're using VS Code
 ```
 
-Note: If another tool already provides a `code` command (e.g. VS Code), our CLI is also installed as `coder`. Use `coder` to avoid conflicts.
+Note: If another tool already provides a `kode` command (e.g. VS Code), our CLI is also installed as `koder`. Use `koder` to avoid conflicts.
 
 **Authenticate** (one of the following):
 - **Sign in with ChatGPT** (Plus/Pro/Team; uses models available to your plan)
-  - Run `code` and pick "Sign in with ChatGPT"
+  - Run `kode` and pick "Sign in with ChatGPT"
 - **API key** (usage-based)
-  - Set `export OPENAI_API_KEY=xyz` and run `code`
+  - Set `export OPENAI_API_KEY=xyz` and run `kode`
 
 ### Install Claude & Gemini (optional)
 
-Code supports orchestrating other AI CLI tools. Install these and config to use alongside Code.
+kode supports orchestrating other AI CLI tools. Install these and config to use alongside kode.
 
 ```bash
 # Ensure Node.js 20+ is available locally (installs into ~/.n)
@@ -203,7 +203,7 @@ qwen --version
 ## CLI reference
 
 ```shell
-code [options] [prompt]
+kode [options] [prompt]
 
 Options:
   --model <name>        Override the model (gpt-5, claude-opus, etc.)
@@ -220,7 +220,7 @@ Options:
 &ensp;
 ## Memory & project docs
 
-Code can remember context across sessions:
+kode can remember context across sessions:
 
 1. **Create an `AGENTS.md` or `CLAUDE.md` file** in your project root:
 ```markdown
@@ -236,7 +236,7 @@ This is a React TypeScript application with:
 - `/server/` - Backend services
 ```
 
-2. **Session memory**: Code maintains conversation history
+2. **Session memory**: kode maintains conversation history
 3. **Codebase analysis**: Automatically understands project structure
 
 &ensp;
@@ -246,26 +246,26 @@ For automation and CI/CD:
 
 ```shell
 # Run a specific task
-code --no-approval "run tests and fix any failures"
+kode --no-approval "run tests and fix any failures"
 
 # Generate reports
-code --read-only "analyze code quality and generate report"
+kode --read-only "analyze code quality and generate report"
 
 # Batch processing
-code --config output_format=json "list all TODO comments"
+kode --config output_format=json "list all TODO comments"
 ```
 
 &ensp;
 ## Model Context Protocol (MCP)
 
-Code supports MCP for extended capabilities:
+kode supports MCP for extended capabilities:
 
 - **File operations**: Advanced file system access
 - **Database connections**: Query and modify databases
 - **API integrations**: Connect to external services
 - **Custom tools**: Build your own extensions
 
-Configure MCP in `~/.code/config.toml` Define each server under a named table like `[mcp_servers.<name>]` (this maps to the JSON `mcpServers` object used by other clients):
+Configure MCP in `~/.kode/config.toml` Define each server under a named table like `[mcp_servers.<name>]` (this maps to the JSON `mcpServers` object used by other clients):
 
 ```toml
 [mcp_servers.filesystem]
@@ -276,10 +276,10 @@ args = ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
 &ensp;
 ## Configuration
 
-Main config file: `~/.code/config.toml`
+Main config file: `~/.kode/config.toml`
 
 > [!NOTE]
-> Code reads from both `~/.code/` and `~/.codex/` for backwards compatibility, but it only writes updates to `~/.code/`. If you switch back to Codex and it fails to start, remove `~/.codex/config.toml`. If Code appears to miss settings after upgrading, copy your legacy `~/.codex/config.toml` into `~/.code/`.
+> kode reads from both `~/.kode/` and `~/.codex/` for backwards compatibility, but it only writes updates to `~/.kode/`. If you switch back to Codex and it fails to start, remove `~/.codex/config.toml`. If kode appears to miss settings after upgrading, copy your legacy `~/.codex/config.toml` into `~/.kode/`.
 
 ```toml
 # Model settings
@@ -306,7 +306,7 @@ model_reasoning_summary = "detailed"
 
 ### Environment variables
 
-- `CODE_HOME`: Override config directory location
+- `KODE_HOME`: Override config directory location
 - `OPENAI_API_KEY`: Use API key instead of ChatGPT auth
 - `OPENAI_BASE_URL`: Use alternative API endpoints
 - `OPENAI_WIRE_API`: Force the built-in OpenAI provider to use `chat` or `responses` wiring
@@ -318,7 +318,7 @@ model_reasoning_summary = "detailed"
 > This fork adds browser integration, multi-agent commands (`/plan`, `/solve`, `/code`), theme system, and enhanced reasoning controls while maintaining full compatibility.
 
 **Can I use my existing Codex configuration?**
-> Yes. Code reads from both `~/.code/` (primary) and legacy `~/.codex/` directories. We only write to `~/.code/`, so Codex will keep running if you switch back; copy or remove legacy files if you notice conflicts.
+> Yes. kode reads from both `~/.kode/` (primary) and legacy `~/.codex/` directories. We only write to `~/.kode/`, so Codex will keep running if you switch back; copy or remove legacy files if you notice conflicts.
 
 **Does this work with ChatGPT Plus?**
 > Absolutely. Use the same "Sign in with ChatGPT" flow as the original.
@@ -335,8 +335,8 @@ We welcome contributions! This fork maintains compatibility with upstream while 
 
 ```bash
 # Clone and setup
-git clone https://github.com/just-every/code.git
-cd code
+git clone https://github.com/just-every/kode.git
+cd kode
 npm install
 
 # Build (use fast build for development)
@@ -361,21 +361,21 @@ npm install
 
 ### License & attribution
 - This project is a community fork of `openai/codex` under **Apache-2.0**. We preserve upstream LICENSE and NOTICE files.
-- **Code** is **not** affiliated with, sponsored by, or endorsed by OpenAI.
+- **kode** is **not** affiliated with, sponsored by, or endorsed by OpenAI.
 
 ### Your responsibilities
-Using OpenAI, Anthropic or Google services through Code means you agree to **their Terms and policies**. In particular:
+Using OpenAI, Anthropic or Google services through kode means you agree to **their Terms and policies**. In particular:
 - **Don't** programmatically scrape/extract content outside intended flows.
 - **Don't** bypass or interfere with rate limits, quotas, or safety mitigations.
 - Use your **own** account; don't share or rotate accounts to evade limits.
 - If you configure other model providers, you're responsible for their terms.
 
 ### Privacy
-- Your auth file lives at `~/.code/auth.json`
+- Your auth file lives at `~/.kode/auth.json`
 - Inputs/outputs you send to AI providers are handled under their Terms and Privacy Policy; consult those documents (and any org-level data-sharing settings).
 
 ### Subject to change
-AI providers can change eligibility, limits, models, or authentication flows. Code supports **both** ChatGPT sign-in and API-key modes so you can pick what fits (local/hobby vs CI/automation).
+AI providers can change eligibility, limits, models, or authentication flows. kode supports **both** ChatGPT sign-in and API-key modes so you can pick what fits (local/hobby vs CI/automation).
 
 &ensp;
 ## License
@@ -386,4 +386,4 @@ This project is a community fork of the original Codex CLI. We maintain compatib
 
 &ensp;
 ---
-**Need help?** Open an issue on [GitHub](https://github.com/just-every/code/issues) or check our documentation.
+**Need help?** Open an issue on [GitHub](https://github.com/just-every/kode/issues) or check our documentation.

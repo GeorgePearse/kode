@@ -58,7 +58,7 @@ code-rs/bin/
 /codex-rs/.cargo2/
 
 # Release and CI scratch
-/.code-bin/
+/.kode-bin/
 /artifacts/
 /release-assets/
 /npm-binaries/
@@ -131,9 +131,9 @@ CHANGELOG.ignore.md
 branches/
 /.wt-*/
 
-# coder directories
-.coder/
-.code/
+# koder directories
+.koder/
+.kode/
 
 # trigger: test non-notes change (no [skip ci])
 
