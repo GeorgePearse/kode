@@ -1,0 +1,49 @@
+# Prek hooks configuration for Rust code quality
+# Install with: prek install
+# Run hooks: prek run (or prek run --all-files to check all files)
+
+repos:
+  # Local Rust-specific hooks
+  - repo: local
+    hooks:
+      - id: rust-analyzer
+        name: rust-analyzer semantic checks
+        entry: rust-analyzer check
+        language: system
+        types: [rust]
+        pass_filenames: false
+        stages: [commit]
+
+      - id: rustfmt
+        name: rustfmt code formatting
+        entry: cargo fmt --
+        language: system
+        types: [rust]
+        stages: [commit]
+
+      - id: cargo-clippy
+        name: cargo clippy linting
+        entry: cargo clippy --all-targets --all-features -- -D warnings
+        language: system
+        types: [rust]
+        pass_filenames: false
+        stages: [commit]
+
+      - id: cargo-check
+        name: cargo check compilation
+        entry: cargo check --all-targets --all-features
+        language: system
+        types: [rust]
+        pass_filenames: false
+        stages: [commit]
+
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
