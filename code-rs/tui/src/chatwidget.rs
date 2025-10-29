@@ -7539,7 +7539,7 @@ impl ChatWidget<'_> {
         // Animation cleanup is now handled differently
     }
 
-    /// Replace the initial Popular Commands notice that includes
+    /// Replace the initial Hello George notice that includes
     /// the transient "Connecting MCP servers…" line with a version
     /// that omits it.
     fn remove_connecting_mcp_notice(&mut self) {
