@@ -60,7 +60,7 @@ kode is part of an evolving ecosystem of AI coding agents. Here's how it compare
 
 ### Code Understanding
 
-- **[Serena](https://github.com/getserenadeai/serenadeai)** – Semantic code analysis toolkit (planned kode integration)
+- **[Serena](https://github.com/oraios/serena)** – Semantic code analysis toolkit (planned kode integration)
 - **[Brokk](https://github.com/BrokkAi/brokk)** – Code understanding and analysis platform
 
 ## Implementation Patterns
