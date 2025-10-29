@@ -581,9 +581,15 @@ A critical enabler for distributed execution and multi-agent coordination is a p
 
 A pub/sub layer would also enhance observability by funneling all agent activities through typed events, enabling comprehensive tracing, metrics collection, and audit logging for complex multi-agent workflows.
 
+**Complementary Pattern**: The pub/sub architecture can be combined with the **actor model** for even more powerful concurrent system design. In the actor model, each agent is an independent actor that receives messages asynchronously and processes them in isolation, avoiding shared mutable state. Tokio's async runtime is well-suited for implementing actor patterns in Rust.
+
 ## References
 
+### Internal Documentation
 - [State Inventory](../../auto-drive-state-inventory.md) - Detailed state management
 - [Phase Migration](../../auto-drive-phase-migration-TODO.md) - Migration guide
 - [Auto QA Documentation](../../auto-qa.md) - Quality assurance details
 - Source: `code-rs/code-auto-drive-core/`
+
+### Further Reading on Concurrent Patterns
+- [Actors with Tokio](https://ryhl.io/blog/actors-with-tokio/) - Comprehensive guide to implementing the actor pattern with Tokio for concurrent, message-driven architecture
