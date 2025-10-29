@@ -31,20 +31,22 @@ pub use error::{MarsError, Result};
 pub use types::{MarsEvent, MarsOutput, Solution};
 
 // These will be implemented next
-pub mod coordinator;
 pub mod agent;
-pub mod workspace;
-pub mod verifier;
 pub mod aggregator;
-pub mod strategy;
+pub mod coordinator;
+pub mod moa;
 pub mod prompts;
+pub mod strategy;
+pub mod verifier;
+pub mod workspace;
 
-pub use coordinator::MarsCoordinator;
 pub use agent::Agent;
-pub use workspace::Workspace;
-pub use verifier::Verifier;
 pub use aggregator::Aggregator;
+pub use coordinator::MarsCoordinator;
+pub use moa::MoaAggregator;
 pub use strategy::StrategyNetwork;
+pub use verifier::Verifier;
+pub use workspace::Workspace;
 
 /// MARS module version
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

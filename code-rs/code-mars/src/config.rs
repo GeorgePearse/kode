@@ -1,5 +1,4 @@
 /// Configuration for MARS (Multi-Agent Reasoning System).
-
 use serde::{Deserialize, Serialize};
 
 /// Configuration for MARS execution
@@ -56,6 +55,18 @@ pub struct MarsConfig {
     /// Default: 3
     pub aggregation_loops: usize,
 
+    /// Method to use for aggregation
+    /// Default: RSA
+    pub aggregation_method: crate::types::AggregationMethod,
+
+    /// Number of completions to generate in MOA phase 1
+    /// Default: 3
+    pub moa_num_completions: usize,
+
+    /// Enable fallback for MOA when n parameter not supported
+    /// Default: true
+    pub moa_fallback_enabled: bool,
+
     /// Request timeout in seconds
     /// Default: 300
     pub timeout_seconds: u64,
@@ -81,6 +92,9 @@ impl Default for MarsConfig {
             aggregation_population_size: 6,
             aggregation_selection_size: 3,
             aggregation_loops: 3,
+            aggregation_method: crate::types::AggregationMethod::RSA,
+            moa_num_completions: 3,
+            moa_fallback_enabled: true,
             timeout_seconds: 300,
             debug: false,
         }
@@ -154,6 +168,32 @@ impl MarsConfig {
     /// Enable debug mode
     pub fn with_debug(mut self, debug: bool) -> Self {
         self.debug = debug;
+        self
+    }
+
+    /// Set aggregation method
+    pub fn with_aggregation_method(mut self, method: crate::types::AggregationMethod) -> Self {
+        self.aggregation_method = method;
+        self
+    }
+
+    /// Set MOA aggregation method
+    pub fn with_moa_aggregation(mut self) -> Self {
+        self.aggregation_method = crate::types::AggregationMethod::MixtureOfAgents;
+        self
+    }
+
+    /// Set number of completions for MOA
+    pub fn with_moa_num_completions(mut self, num: usize) -> Self {
+        if num > 0 {
+            self.moa_num_completions = num;
+        }
+        self
+    }
+
+    /// Set MOA fallback behavior
+    pub fn with_moa_fallback_enabled(mut self, enabled: bool) -> Self {
+        self.moa_fallback_enabled = enabled;
         self
     }
 

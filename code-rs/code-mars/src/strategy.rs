@@ -1,7 +1,6 @@
-/// Strategy network for sharing successful reasoning approaches across agents.
-
-use crate::types::Strategy;
 use crate::Result;
+/// Strategy network for sharing successful reasoning approaches across agents.
+use crate::types::Strategy;
 use chrono::Utc;
 use std::collections::HashMap;
 use uuid::Uuid;
@@ -62,9 +61,10 @@ impl StrategyNetwork {
             strategy.success_rate = strategy.success_rate * 0.8 + delta * 0.2;
             Ok(())
         } else {
-            Err(crate::MarsError::StrategyExtractionError(
-                format!("Strategy {} not found", strategy_id),
-            ))
+            Err(crate::MarsError::StrategyExtractionError(format!(
+                "Strategy {} not found",
+                strategy_id
+            )))
         }
     }
 
@@ -242,16 +242,8 @@ mod tests {
     #[test]
     fn test_diversity_metrics() {
         let mut network = StrategyNetwork::new();
-        network.register_strategy(
-            "agent1".to_string(),
-            "S1".to_string(),
-            "T1".to_string(),
-        );
-        network.register_strategy(
-            "agent2".to_string(),
-            "S2".to_string(),
-            "T2".to_string(),
-        );
+        network.register_strategy("agent1".to_string(), "S1".to_string(), "T1".to_string());
+        network.register_strategy("agent2".to_string(), "S2".to_string(), "T2".to_string());
 
         let diversity = network.get_diversity_metrics();
         assert_eq!(diversity.total_strategies, 2);

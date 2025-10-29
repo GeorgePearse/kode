@@ -1,5 +1,5 @@
 /// Error types for MARS operations.
-
+use code_core::error::CodexErr;
 use thiserror::Error;
 
 /// Result type for MARS operations
@@ -52,8 +52,8 @@ pub enum MarsError {
 }
 
 // Implement conversion from code_core's CodexErr
-impl From<code_core::CodexErr> for MarsError {
-    fn from(err: code_core::CodexErr) -> Self {
+impl From<CodexErr> for MarsError {
+    fn from(err: CodexErr) -> Self {
         MarsError::CoreError(err.to_string())
     }
 }

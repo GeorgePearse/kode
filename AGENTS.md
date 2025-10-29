@@ -134,3 +134,41 @@ This architecture separates concerns between execution logic (core), UI state ma
 - Adjust the poll cadence via `--interval <seconds>` (defaults to 8). The script exits 0 on success and 1 on failure, so it can gate local automation.
 - Pass `--failure-logs` to automatically dump logs for any job that does not finish successfully.
 - Dependencies: GitHub CLI (`gh`) and `jq` must be available in `PATH`.
+
+## Referencing the Original Python Implementation
+
+**CRITICAL: Before implementing any functionality, always consult the original Python implementation in `references/optillm/`.**
+
+The local reference copy is available at `./references/optillm/` in this repository. This is the source of truth for all functionality.
+
+### Workflow
+
+1. **Locate the Python reference**: Search `references/optillm/` for the corresponding functionality
+2. **Study the implementation**: Understand the algorithm, logic flow, and data transformations
+3. **Document the reference**: Note the file path, function name, and key implementation details
+4. **Implement identically**: Translate the Python logic to Rust while maintaining:
+   - Identical algorithm behavior
+   - Same parameter handling and validation
+   - Equivalent error cases and edge cases
+   - Matching output formats and semantics
+
+### Key Principle
+
+**Functionality must be identical to the original Python implementation.** This ensures:
+- Consistency across implementations
+- Predictable behavior for users
+- Easier debugging and maintenance
+- Clear mapping between versions
+
+When you encounter discrepancies or need to clarify intent, reference the Python source as the source of truth. If the Python implementation has a bug, document it and match the behavior anyway unless explicitly told to fix it.
+
+### Example Pattern
+
+When implementing a new feature:
+```
+1. Find: references/optillm/optillm/<module>/<file>.py - specific function
+2. Read: Study the Python implementation thoroughly
+3. Reference: Add a comment like `// Based on references/optillm/optillm/module/file.py::function_name()`
+4. Test: Verify behavior matches Python for all test cases
+5. Document: Note any intentional divergences
+```

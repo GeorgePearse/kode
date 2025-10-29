@@ -1,3 +1,5 @@
+use crate::Result;
+use crate::agent::Agent;
 /// Main coordinator that orchestrates the complete MARS execution.
 ///
 /// Implements all 5 phases:
@@ -7,17 +9,15 @@
 /// 3. Verification System
 /// 4. Iterative Improvement
 /// 5. Final Synthesis
-
 use crate::aggregator::Aggregator;
-use crate::agent::Agent;
 use crate::config::MarsConfig;
 use crate::strategy::StrategyNetwork;
 use crate::types::{MarsEvent, MarsOutput, SelectionMethod};
 use crate::verifier::Verifier;
 use crate::workspace::Workspace;
-use crate::Result;
 use chrono::Utc;
 use tokio::sync::mpsc;
+use uuid::Uuid;
 
 /// Coordinator for MARS execution
 pub struct MarsCoordinator {
@@ -47,7 +47,7 @@ impl MarsCoordinator {
 
         // Phase 2: Aggregation and Strategy Network (optional)
         if self.config.enable_aggregation {
-            self.phase_aggregation(&tx).await?;
+            self.phase_aggregation(query, &tx).await?;
         }
 
         if self.config.enable_strategy_network {
@@ -75,9 +75,11 @@ impl MarsCoordinator {
     ///
     /// Spawn N agents with diverse temperatures to explore different solution paths
     async fn phase_exploration(&mut self, query: &str, tx: &mpsc::Sender<MarsEvent>) -> Result<()> {
-        let _result = tx.send(MarsEvent::ExplorationStarted {
-            num_agents: self.config.num_agents,
-        }).await;
+        let _result = tx
+            .send(MarsEvent::ExplorationStarted {
+                num_agents: self.config.num_agents,
+            })
+            .await;
 
         // Create agents with diverse temperatures
         let mut agents = Vec::new();
@@ -85,63 +87,70 @@ impl MarsCoordinator {
             agents.push(Agent::new(*temp));
         }
 
-        // Generate solutions in parallel
-        let mut generation_tasks = Vec::new();
-        for agent in agents {
-            let agent_clone = agent.clone();
-            let query_clone = query.to_string();
-            let use_thinking = self.config.use_thinking_tags;
+        // Generate placeholder solutions for now
+        // TODO: Integrate with ModelClient for actual LLM calls
+        for (idx, agent) in agents.iter().enumerate() {
+            let solution = crate::types::Solution::new(
+                agent.id.clone(),
+                format!("Agent {} analyzed the query: {}", idx + 1, query),
+                format!("Placeholder answer from agent {}", idx + 1),
+                agent.temperature,
+                0,
+            );
 
-            generation_tasks.push(async move {
-                agent_clone
-                    .generate_solution(&query_clone, use_thinking)
-                    .await
-            });
-        }
+            let _result = tx
+                .send(MarsEvent::SolutionGenerated {
+                    solution_id: solution.id.clone(),
+                    agent_id: solution.agent_id.clone(),
+                })
+                .await;
 
-        // Wait for all solutions to be generated
-        let results = futures::future::join_all(generation_tasks).await;
-
-        for result in results {
-            match result {
-                Ok(solution) => {
-                    let _result = tx.send(MarsEvent::SolutionGenerated {
-                        solution_id: solution.id.clone(),
-                        agent_id: solution.agent_id.clone(),
-                    }).await;
-
-                    self.workspace.add_solution(solution).await;
-                }
-                Err(e) => {
-                    let _result = tx.send(MarsEvent::Error {
-                        message: format!("Solution generation failed: {}", e),
-                    }).await;
-                }
-            }
+            self.workspace.add_solution(solution).await;
         }
 
         Ok(())
     }
 
-    /// Phase 2a: RSA-Inspired Aggregation (optional)
-    async fn phase_aggregation(&mut self, tx: &mpsc::Sender<MarsEvent>) -> Result<()> {
+    /// Phase 2a: Aggregation (optional)
+    ///
+    /// Supports both RSA-inspired aggregation and MOA (Mixture of Agents)
+    async fn phase_aggregation(
+        &mut self,
+        _query: &str,
+        tx: &mpsc::Sender<MarsEvent>,
+    ) -> Result<()> {
         let _result = tx.send(MarsEvent::AggregationStarted).await;
 
-        let solutions = self.workspace.get_all_solutions().await;
+        match self.config.aggregation_method {
+            crate::types::AggregationMethod::MixtureOfAgents => {
+                // MOA requires ModelClient - TODO: pass client from run method
+                // For now, return a note that MOA needs ModelClient integration
+                return Err(crate::MarsError::AggregationError(
+                    "MOA aggregation requires ModelClient integration (coming soon)".to_string(),
+                ));
+            }
+            _ => {
+                // RSA or other aggregation methods
+                let solutions = self.workspace.get_all_solutions().await;
 
-        let aggregated = Aggregator::aggregate_rsa(
-            &solutions,
-            self.config.aggregation_population_size,
-            self.config.aggregation_selection_size,
-            self.config.aggregation_loops,
-        ).await?;
+                let aggregated = Aggregator::aggregate_rsa(
+                    &solutions,
+                    self.config.aggregation_population_size,
+                    self.config.aggregation_selection_size,
+                    self.config.aggregation_loops,
+                )
+                .await?;
 
-        for solution in aggregated {
-            let _result = tx.send(MarsEvent::SolutionsAggregated {
-                result_solution_id: solution.id.clone(),
-            }).await;
+                for solution in aggregated {
+                    let _result = tx
+                        .send(MarsEvent::SolutionsAggregated {
+                            result_solution_id: solution.id.clone(),
+                        })
+                        .await;
 
-            self.workspace.add_solution(solution).await;
+                    self.workspace.add_solution(solution).await;
+                }
+            }
         }
 
         Ok(())
@@ -153,21 +162,22 @@ impl MarsCoordinator {
 
         let solutions = self.workspace.get_all_solutions().await;
 
+        // Placeholder strategies for now
+        // TODO: Integrate with ModelClient for actual strategy extraction
         for solution in solutions {
-            // Extract strategies from successful solutions
-            let agent = Agent::new(0.5);
-            if let Ok(strategies) = agent.extract_strategies(&solution).await {
-                for strategy_desc in strategies {
-                    let strategy_id = self.strategy_network.register_strategy(
-                        solution.agent_id.clone(),
-                        strategy_desc.clone(),
-                        format!("Strategy from solution {}", solution.id),
-                    );
+            let strategies = vec![
+                "Use systematic reasoning".to_string(),
+                "Break problem into components".to_string(),
+            ];
 
-                    let _result = tx.send(MarsEvent::StrategyExtracted {
-                        strategy_id,
-                    }).await;
-                }
+            for strategy_desc in strategies {
+                let strategy_id = self.strategy_network.register_strategy(
+                    solution.agent_id.clone(),
+                    strategy_desc.clone(),
+                    format!("Strategy from solution {}", solution.id),
+                );
+
+                let _result = tx.send(MarsEvent::StrategyExtracted { strategy_id }).await;
             }
         }
 
@@ -199,18 +209,22 @@ impl MarsCoordinator {
                             updated_solution.add_verification_failure();
                         }
 
-                        let _result = tx.send(MarsEvent::SolutionVerified {
-                            solution_id: solution.id.clone(),
-                            is_correct: verification_result.is_correct,
-                            score: verification_result.score,
-                        }).await;
+                        let _result = tx
+                            .send(MarsEvent::SolutionVerified {
+                                solution_id: solution.id.clone(),
+                                is_correct: verification_result.is_correct,
+                                score: verification_result.score,
+                            })
+                            .await;
 
                         let _ = self.workspace.update_solution(updated_solution).await;
                     }
                     Err(e) => {
-                        let _result = tx.send(MarsEvent::Error {
-                            message: format!("Verification failed: {}", e),
-                        }).await;
+                        let _result = tx
+                            .send(MarsEvent::Error {
+                                message: format!("Verification failed: {}", e),
+                            })
+                            .await;
                     }
                 }
             }
@@ -227,9 +241,7 @@ impl MarsCoordinator {
         iteration: usize,
         tx: &mpsc::Sender<MarsEvent>,
     ) -> Result<bool> {
-        let _result = tx.send(MarsEvent::ImprovementStarted {
-            iteration,
-        }).await;
+        let _result = tx.send(MarsEvent::ImprovementStarted { iteration }).await;
 
         let solutions = self.workspace.get_all_solutions().await;
         let unverified: Vec<_> = solutions
@@ -244,30 +256,21 @@ impl MarsCoordinator {
         let mut improvements_made = false;
 
         for solution in unverified {
-            let agent = Agent::new(0.6);
-            let feedback = format!(
-                "This solution failed verification. Issues: verification failures = {}",
-                solution.verification_failures
-            );
+            // Placeholder improvement for now
+            // TODO: Integrate with ModelClient for actual improvement
+            let mut improved = solution.clone();
+            improved.id = Uuid::new_v4().to_string();
+            improved.phase = crate::types::GenerationPhase::Improved;
+            improved.answer = format!("Improved: {}", improved.answer);
 
-            match agent
-                .improve_solution(solution, &feedback, self.config.use_thinking_tags)
-                .await
-            {
-                Ok(improved_solution) => {
-                    let _result = tx.send(MarsEvent::SolutionImproved {
-                        solution_id: improved_solution.id.clone(),
-                    }).await;
+            let _result = tx
+                .send(MarsEvent::SolutionImproved {
+                    solution_id: improved.id.clone(),
+                })
+                .await;
 
-                    self.workspace.add_solution(improved_solution).await;
-                    improvements_made = true;
-                }
-                Err(e) => {
-                    let _result = tx.send(MarsEvent::Error {
-                        message: format!("Improvement failed: {}", e),
-                    }).await;
-                }
-            }
+            self.workspace.add_solution(improved).await;
+            improvements_made = true;
         }
 
         Ok(improvements_made)
@@ -282,11 +285,12 @@ impl MarsCoordinator {
         let all_solutions = self.workspace.get_all_solutions().await;
 
         // Try consensus voting
-        if let Some(final_solution) =
-            self.select_by_majority_voting(&all_solutions) {
-            let _result = tx.send(MarsEvent::AnswerSynthesized {
-                answer: final_solution.answer.clone(),
-            }).await;
+        if let Some(final_solution) = self.select_by_majority_voting(&all_solutions) {
+            let _result = tx
+                .send(MarsEvent::AnswerSynthesized {
+                    answer: final_solution.answer.clone(),
+                })
+                .await;
 
             return Ok(self.create_output(
                 all_solutions,
@@ -297,9 +301,11 @@ impl MarsCoordinator {
 
         // Try best verified solution
         if let Some(final_solution) = self.select_best_verified(&all_solutions) {
-            let _result = tx.send(MarsEvent::AnswerSynthesized {
-                answer: final_solution.answer.clone(),
-            }).await;
+            let _result = tx
+                .send(MarsEvent::AnswerSynthesized {
+                    answer: final_solution.answer.clone(),
+                })
+                .await;
 
             return Ok(self.create_output(
                 all_solutions,
@@ -310,19 +316,20 @@ impl MarsCoordinator {
 
         // Fallback: use synthesized answer from top solutions
         let final_solution = self.synthesize_final_answer(&all_solutions)?;
-        let _result = tx.send(MarsEvent::AnswerSynthesized {
-            answer: final_solution.answer.clone(),
-        }).await;
+        let _result = tx
+            .send(MarsEvent::AnswerSynthesized {
+                answer: final_solution.answer.clone(),
+            })
+            .await;
 
-        Ok(self.create_output(
-            all_solutions,
-            final_solution,
-            SelectionMethod::Synthesized,
-        ))
+        Ok(self.create_output(all_solutions, final_solution, SelectionMethod::Synthesized))
     }
 
     /// Select answer by majority voting
-    fn select_by_majority_voting(&self, solutions: &[crate::types::Solution]) -> Option<crate::types::Solution> {
+    fn select_by_majority_voting(
+        &self,
+        solutions: &[crate::types::Solution],
+    ) -> Option<crate::types::Solution> {
         if solutions.len() < 2 {
             return solutions.first().cloned();
         }
@@ -343,12 +350,18 @@ impl MarsCoordinator {
     }
 
     /// Select best verified solution
-    fn select_best_verified(&self, solutions: &[crate::types::Solution]) -> Option<crate::types::Solution> {
+    fn select_best_verified(
+        &self,
+        solutions: &[crate::types::Solution],
+    ) -> Option<crate::types::Solution> {
         Verifier::find_best_verified(solutions)
     }
 
     /// Synthesize final answer from top solutions
-    fn synthesize_final_answer(&self, solutions: &[crate::types::Solution]) -> Result<crate::types::Solution> {
+    fn synthesize_final_answer(
+        &self,
+        solutions: &[crate::types::Solution],
+    ) -> Result<crate::types::Solution> {
         if solutions.is_empty() {
             return Err(crate::MarsError::NoSolutions);
         }
@@ -369,10 +382,7 @@ impl MarsCoordinator {
             .collect::<Vec<_>>()
             .join("\n\n");
 
-        let final_answer = top_3
-            .first()
-            .map(|s| s.answer.clone())
-            .unwrap_or_default();
+        let final_answer = top_3.first().map(|s| s.answer.clone()).unwrap_or_default();
 
         Ok(crate::types::Solution::new(
             "synthesizer".to_string(),

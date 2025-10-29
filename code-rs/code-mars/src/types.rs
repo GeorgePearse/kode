@@ -1,5 +1,4 @@
 /// Core types for the MARS (Multi-Agent Reasoning System) implementation.
-
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -152,6 +151,8 @@ pub enum AggregationMethod {
     BestOfN,
     /// Mixture of experts
     MixtureOfExperts,
+    /// Mixture of Agents (MOA) - generates diverse completions and synthesizes
+    MixtureOfAgents,
 }
 
 /// Strategy extracted from a solution
@@ -213,7 +214,10 @@ pub enum MarsEvent {
     /// Initial exploration phase started
     ExplorationStarted { num_agents: usize },
     /// Agent generated a solution
-    SolutionGenerated { solution_id: String, agent_id: String },
+    SolutionGenerated {
+        solution_id: String,
+        agent_id: String,
+    },
     /// Verification phase started
     VerificationStarted,
     /// Solution was verified
@@ -239,7 +243,10 @@ pub enum MarsEvent {
     /// Final answer synthesized
     AnswerSynthesized { answer: String },
     /// MARS execution completed
-    Completed { final_answer: String, method: String },
+    Completed {
+        final_answer: String,
+        method: String,
+    },
     /// Error occurred
     Error { message: String },
 }

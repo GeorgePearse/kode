@@ -1,7 +1,6 @@
-/// RSA-inspired aggregation for refining solutions.
-
-use crate::types::{GenerationPhase, Solution};
 use crate::Result;
+/// RSA-inspired aggregation for refining solutions.
+use crate::types::{GenerationPhase, Solution};
 use rand::prelude::IndexedRandom;
 use std::collections::HashSet;
 
@@ -9,6 +8,31 @@ use std::collections::HashSet;
 pub struct Aggregator;
 
 impl Aggregator {
+    /// Run MOA (Mixture of Agents) aggregation using ModelClient
+    ///
+    /// This process:
+    /// 1. Generates diverse completions with high temperature
+    /// 2. Critiques each completion, analyzing strengths/weaknesses
+    /// 3. Synthesizes final answer using critiques
+    pub async fn aggregate_moa(
+        query: &str,
+        system_prompt: &str,
+        num_completions: usize,
+        fallback_enabled: bool,
+        client: &code_core::ModelClient,
+    ) -> Result<Vec<Solution>> {
+        let (solution, _metadata) = crate::moa::MoaAggregator::run_moa(
+            query,
+            system_prompt,
+            num_completions,
+            fallback_enabled,
+            client,
+        )
+        .await?;
+
+        Ok(vec![solution])
+    }
+
     /// Run RSA-inspired aggregation on solutions
     ///
     /// This process:
@@ -64,7 +88,7 @@ impl Aggregator {
         }
 
         let num_to_select = num_to_select.min(solutions.len());
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let selected: Vec<Solution> = solutions
             .choose_multiple(&mut rng, num_to_select)
             .cloned()
@@ -108,7 +132,11 @@ impl Aggregator {
         let mut combined = String::from("Combined reasoning from multiple approaches:\n\n");
 
         for (idx, solution) in solutions.iter().enumerate() {
-            combined.push_str(&format!("Approach {}:\n{}\n\n", idx + 1, solution.reasoning));
+            combined.push_str(&format!(
+                "Approach {}:\n{}\n\n",
+                idx + 1,
+                solution.reasoning
+            ));
         }
 
         combined
@@ -166,8 +194,7 @@ impl Aggregator {
         };
 
         // Count unique answers
-        let unique_answers: HashSet<_> =
-            solutions.iter().map(|s| s.answer.clone()).collect();
+        let unique_answers: HashSet<_> = solutions.iter().map(|s| s.answer.clone()).collect();
 
         AggregationStatistics {
             total_solutions,

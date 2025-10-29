@@ -1,7 +1,6 @@
-/// Verification system for cross-agent solution checking.
-
-use crate::types::{Solution, VerificationResult};
 use crate::Result;
+/// Verification system for cross-agent solution checking.
+use crate::types::{Solution, VerificationResult};
 
 /// Verifier that checks solution correctness
 pub struct Verifier;
@@ -59,10 +58,7 @@ impl Verifier {
     ///
     /// A solution is considered verified when it receives multiple
     /// consecutive verification passes.
-    pub fn meets_consensus(
-        solution: &Solution,
-        consensus_threshold: usize,
-    ) -> bool {
+    pub fn meets_consensus(solution: &Solution, consensus_threshold: usize) -> bool {
         solution.verification_passes >= consensus_threshold && solution.verification_failures == 0
     }
 
@@ -84,7 +80,11 @@ impl Verifier {
 
     /// Filter solutions by verification status
     pub fn filter_verified(solutions: &[Solution]) -> Vec<Solution> {
-        solutions.iter().filter(|s| s.is_verified).cloned().collect()
+        solutions
+            .iter()
+            .filter(|s| s.is_verified)
+            .cloned()
+            .collect()
     }
 
     /// Find the best verified solution
@@ -159,8 +159,13 @@ mod tests {
         sol1.add_verification_pass(0.9);
         sol1.add_verification_pass(0.9);
 
-        let sol2 =
-            Solution::new("agent2".to_string(), "r2".to_string(), "a2".to_string(), 0.5, 100);
+        let sol2 = Solution::new(
+            "agent2".to_string(),
+            "r2".to_string(),
+            "a2".to_string(),
+            0.5,
+            100,
+        );
 
         let solutions = vec![sol1, sol2];
         let verified = Verifier::filter_verified(&solutions);
