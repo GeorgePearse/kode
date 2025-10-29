@@ -40,7 +40,7 @@ kode is part of an evolving ecosystem of AI coding agents. Here's how it compare
 ### CLI Tools
 
 - **[Aider](https://aider.chat/)** – Git-aware AI pair programmer with code editing capabilities
-- **[OpenCode](https://github.com/computer-use-enabled/opencode)** – Computer use-enabled coding agent
+- **[OpenCode](https://github.com/sst/opencode)** – Computer use-enabled coding agent
 - **[Cline](https://github.com/cline/cline)** – VS Code extension for agentic coding workflows
 - **[Goose](https://github.com/block/goose)** – Extensible coding agent with custom tool support
 - **[Plandex](https://plandex.ai/)** – Task-driven planning and execution agent
