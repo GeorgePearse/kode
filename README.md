@@ -10,6 +10,11 @@
 
 **kode** is a fast, local coding agent for your terminal. It's a community-driven fork of `openai/codex` focused on real developer ergonomics: Browser integration, multi-agents, theming, and reasoning control — all while staying compatible with upstream.
 
+Interactions with git take fucking ages, no idea why they're so slow, should maybe automatically swap to a smaller model for that 
+
+<img width="460" height="464" alt="image" src="https://github.com/user-attachments/assets/bd152896-ccb7-4dd1-b1aa-768f9b1840d3" />
+
+
 &ensp;
 ## What's new in v0.4.0 (October 26, 2025)
 
