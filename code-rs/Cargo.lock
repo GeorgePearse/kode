@@ -1434,6 +1434,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "code-mars"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "code-core",
+ "code-protocol",
+ "futures",
+ "insta",
+ "pretty_assertions",
+ "rand 0.9.2",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tokio-test",
+ "tracing",
+ "uuid",
+ "wiremock",
+]
+
+[[package]]
 name = "code-mcp-client"
 version = "0.0.0"
 dependencies = [
