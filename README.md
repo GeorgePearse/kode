@@ -62,6 +62,7 @@ kode is part of an evolving ecosystem of AI coding agents. Here's how it compare
 
 - **[Serena](https://github.com/oraios/serena)** – Semantic code analysis toolkit (planned kode integration)
 - **[Brokk](https://github.com/BrokkAi/brokk)** – Code understanding and analysis platform
+- **[Octocode](https://github.com/bgauryy/octocode-mcp)** - Octocode for code/semantic understanding
 
 ## Implementation Patterns
 
