@@ -3,6 +3,7 @@
 use crate::prompts;
 use crate::types::Solution;
 use crate::Result;
+use futures::StreamExt;
 use uuid::Uuid;
 
 /// An individual agent in the MARS system
@@ -23,73 +24,138 @@ impl Agent {
         }
     }
 
-    /// Generate an initial solution given a query
+    /// Generate an initial solution given a query with ModelClient
     ///
     /// This method calls the LLM with appropriate prompting to generate
     /// a reasoning chain and answer to the given query.
-    pub async fn generate_solution(
+    pub async fn generate_solution_with_client(
         &self,
         query: &str,
         use_thinking_tags: bool,
+        client: &code_core::ModelClient,
     ) -> Result<Solution> {
         // Build the system and user prompts
-        let _system_prompt = if use_thinking_tags {
+        let system_prompt = if use_thinking_tags {
             prompts::MARS_SYSTEM_PROMPT_WITH_THINKING.to_string()
         } else {
             prompts::MARS_SYSTEM_PROMPT.to_string()
         };
 
-        let _user_prompt = format!(
+        let user_prompt = format!(
             "{}\n\n{}",
             prompts::MARS_REASONING_PROMPT,
             query
         );
 
-        // In a real implementation, this would call the LLM client
-        // For now, we'll create a placeholder solution
-        // TODO: Integrate with code-core's ModelClient
+        // Build prompt for ModelClient
+        let mut prompt = code_core::Prompt::default();
+        prompt.input = vec![code_core::ResponseItem::Message {
+            id: None,
+            role: "user".to_string(),
+            content: vec![code_core::ContentItem::InputText {
+                text: user_prompt,
+            }],
+        }];
+        prompt.base_instructions_override = Some(system_prompt);
+        prompt.set_log_tag(&format!("mars_agent_{}", self.id));
 
-        let (reasoning, answer) = self.parse_response("Placeholder response").await?;
+        // Stream the response from LLM
+        let mut stream = client.stream(&prompt).await?;
+        let mut full_response = String::new();
+        let mut token_count = 0;
+
+        while let Some(event) = stream.next().await {
+            match event? {
+                code_core::ResponseEvent::OutputTextDelta { delta, .. } => {
+                    full_response.push_str(&delta);
+                }
+                code_core::ResponseEvent::Completed { token_usage, .. } => {
+                    if let Some(usage) = token_usage {
+                        token_count = usage.total_tokens as usize;
+                    }
+                    break;
+                }
+                _ => {}
+            }
+        }
+
+        let (reasoning, answer) = self.parse_response(&full_response).await?;
 
         let solution = Solution::new(
             self.id.clone(),
             reasoning,
             answer,
             self.temperature,
-            0, // Token count would come from the actual response
+            token_count,
         );
 
         Ok(solution)
     }
 
-    /// Verify another agent's solution
+    /// Verify another agent's solution with ModelClient
     ///
     /// This method evaluates if a solution is mathematically correct,
     /// complete, and rigorous.
-    pub async fn verify_solution(&self, solution: &Solution) -> Result<f32> {
-        let _verification_prompt = format!(
+    pub async fn verify_solution_with_client(
+        &self,
+        solution: &Solution,
+        client: &code_core::ModelClient,
+    ) -> Result<f32> {
+        let verification_prompt = format!(
             "{}\n\nSolution to verify:\n{}\n\nAnswer: {}",
             prompts::VERIFICATION_SYSTEM_PROMPT, solution.reasoning, solution.answer
         );
 
-        // In a real implementation, this would call the LLM
-        // For now, return a placeholder score
-        // TODO: Integrate with code-core's ModelClient
+        // Build prompt for ModelClient
+        let mut prompt = code_core::Prompt::default();
+        prompt.input = vec![code_core::ResponseItem::Message {
+            id: None,
+            role: "user".to_string(),
+            content: vec![code_core::ContentItem::InputText {
+                text: verification_prompt,
+            }],
+        }];
+        prompt.set_log_tag(&format!("mars_verifier_{}", self.id));
 
-        Ok(0.9)
+        // Stream the verification response
+        let mut stream = client.stream(&prompt).await?;
+        let mut verification_response = String::new();
+
+        while let Some(event) = stream.next().await {
+            match event? {
+                code_core::ResponseEvent::OutputTextDelta { delta, .. } => {
+                    verification_response.push_str(&delta);
+                }
+                code_core::ResponseEvent::Completed { .. } => {
+                    break;
+                }
+                _ => {}
+            }
+        }
+
+        // Parse verification score from response
+        let score = Self::extract_verification_score(&verification_response)?;
+        Ok(score)
     }
 
-    /// Improve an existing solution based on feedback
+    /// Improve an existing solution based on feedback with ModelClient
     ///
     /// This method takes unverified solutions and attempts to improve them
     /// based on verification feedback.
-    pub async fn improve_solution(
+    pub async fn improve_solution_with_client(
         &self,
         solution: &Solution,
         feedback: &str,
-        _use_thinking_tags: bool,
+        use_thinking_tags: bool,
+        client: &code_core::ModelClient,
     ) -> Result<Solution> {
-        let _improvement_prompt = format!(
+        let system_prompt = if use_thinking_tags {
+            prompts::MARS_SYSTEM_PROMPT_WITH_THINKING.to_string()
+        } else {
+            prompts::MARS_SYSTEM_PROMPT.to_string()
+        };
+
+        let improvement_prompt = format!(
             "{}\n\nOriginal solution:\nReasoning: {}\nAnswer: {}\n\nFeedback: {}\n\nPlease improve the solution:",
             prompts::IMPROVEMENT_PROMPT,
             solution.reasoning,
@@ -97,12 +163,35 @@ impl Agent {
             feedback
         );
 
-        // In a real implementation, this would call the LLM
-        // For now, create a placeholder improved solution
-        // TODO: Integrate with code-core's ModelClient
+        // Build prompt for ModelClient
+        let mut prompt = code_core::Prompt::default();
+        prompt.input = vec![code_core::ResponseItem::Message {
+            id: None,
+            role: "user".to_string(),
+            content: vec![code_core::ContentItem::InputText {
+                text: improvement_prompt,
+            }],
+        }];
+        prompt.base_instructions_override = Some(system_prompt);
+        prompt.set_log_tag(&format!("mars_improve_{}", self.id));
 
-        let (new_reasoning, new_answer) =
-            self.parse_response("Improved placeholder response").await?;
+        // Stream the improved response
+        let mut stream = client.stream(&prompt).await?;
+        let mut improved_response = String::new();
+
+        while let Some(event) = stream.next().await {
+            match event? {
+                code_core::ResponseEvent::OutputTextDelta { delta, .. } => {
+                    improved_response.push_str(&delta);
+                }
+                code_core::ResponseEvent::Completed { .. } => {
+                    break;
+                }
+                _ => {}
+            }
+        }
+
+        let (new_reasoning, new_answer) = self.parse_response(&improved_response).await?;
 
         let mut improved = Solution::new(
             self.id.clone(),
@@ -117,38 +206,121 @@ impl Agent {
         Ok(improved)
     }
 
-    /// Extract strategies from a solution for cross-agent sharing
+    /// Extract strategies from a solution with ModelClient
     ///
     /// This identifies key techniques and approaches that worked well
     /// so other agents can benefit from them.
-    pub async fn extract_strategies(&self, solution: &Solution) -> Result<Vec<String>> {
-        let _extraction_prompt = format!(
+    pub async fn extract_strategies_with_client(
+        &self,
+        solution: &Solution,
+        client: &code_core::ModelClient,
+    ) -> Result<Vec<String>> {
+        let extraction_prompt = format!(
             "{}\n\nSolution:\n{}",
             prompts::STRATEGY_EXTRACTION_PROMPT, solution.reasoning
         );
 
-        // In a real implementation, this would parse the LLM response
-        // For now, return placeholder strategies
-        // TODO: Integrate with code-core's ModelClient
+        // Build prompt for ModelClient
+        let mut prompt = code_core::Prompt::default();
+        prompt.input = vec![code_core::ResponseItem::Message {
+            id: None,
+            role: "user".to_string(),
+            content: vec![code_core::ContentItem::InputText {
+                text: extraction_prompt,
+            }],
+        }];
+        prompt.set_log_tag(&format!("mars_strategy_{}", self.id));
 
-        Ok(vec![
-            "Strategy 1: Break problem into parts".to_string(),
-            "Strategy 2: Use systematic approach".to_string(),
-        ])
+        // Stream the strategy extraction response
+        let mut stream = client.stream(&prompt).await?;
+        let mut response = String::new();
+
+        while let Some(event) = stream.next().await {
+            match event? {
+                code_core::ResponseEvent::OutputTextDelta { delta, .. } => {
+                    response.push_str(&delta);
+                }
+                code_core::ResponseEvent::Completed { .. } => {
+                    break;
+                }
+                _ => {}
+            }
+        }
+
+        // Parse strategies from response (numbered list format)
+        let strategies = Self::parse_strategies(&response);
+        Ok(strategies)
     }
 
     /// Parse a response into reasoning and answer components
     async fn parse_response(&self, response: &str) -> Result<(String, String)> {
-        // This is a helper function to extract reasoning and answer from LLM response
-        // It looks for patterns like <think></think> tags or separators
-
-        // For now, return a simple split
-        let parts: Vec<&str> = response.split("---").collect();
-        if parts.len() >= 2 {
-            Ok((parts[0].to_string(), parts[1].to_string()))
+        // Extract reasoning from <think> tags if present
+        let reasoning = if let Some(start) = response.find("<think>") {
+            if let Some(end) = response.find("</think>") {
+                response[start + 7..end].trim().to_string()
+            } else {
+                response.to_string()
+            }
         } else {
-            Ok((response.to_string(), response.to_string()))
+            response.to_string()
+        };
+
+        // Extract answer (everything after </think> or entire response)
+        let answer = if let Some(end) = response.find("</think>") {
+            response[end + 8..].trim().to_string()
+        } else if let Some(pos) = response.find("---") {
+            response[pos + 3..].trim().to_string()
+        } else {
+            // If no clear separator, use last 20% of response as answer
+            let len = response.len();
+            let split_point = (len * 4) / 5;
+            response[split_point..].trim().to_string()
+        };
+
+        Ok((reasoning, answer))
+    }
+
+    /// Extract verification score from response
+    fn extract_verification_score(response: &str) -> Result<f32> {
+        // Look for "SCORE: 0.X" pattern
+        let score = if let Some(score_start) = response.find("SCORE:") {
+            let rest = &response[score_start + 6..];
+            let score_str = rest.split_whitespace().next().unwrap_or("0.5");
+            score_str
+                .parse::<f32>()
+                .unwrap_or(0.5)
+                .max(0.0)
+                .min(1.0)
+        } else {
+            // Default to reasonable score
+            0.5
+        };
+        Ok(score)
+    }
+
+    /// Parse strategies from response
+    fn parse_strategies(response: &str) -> Vec<String> {
+        let mut strategies = Vec::new();
+
+        // Look for numbered list items (1. , 2. , etc.)
+        for line in response.lines() {
+            let trimmed = line.trim();
+            // Match lines starting with number. pattern
+            if let Some(content) = trimmed
+                .strip_prefix(|c: char| c.is_numeric())
+                .and_then(|s| s.strip_prefix("."))
+            {
+                strategies.push(content.trim().to_string());
+            }
         }
+
+        // If no numbered strategies found, return placeholder
+        if strategies.is_empty() {
+            strategies.push("Use systematic reasoning".to_string());
+            strategies.push("Break problem into components".to_string());
+        }
+
+        strategies
     }
 }
 

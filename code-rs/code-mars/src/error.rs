@@ -30,7 +30,10 @@ pub enum MarsError {
     AnswerExtractionError(String),
 
     #[error("Client error: {0}")]
-    ClientError(#[from] anyhow::Error),
+    ClientError(String),
+
+    #[error("Core error: {0}")]
+    CoreError(String),
 
     #[error("Timeout: {0}")]
     Timeout(String),
@@ -46,4 +49,11 @@ pub enum MarsError {
 
     #[error("Coordinator error: {0}")]
     CoordinatorError(String),
+}
+
+// Implement conversion from code_core's CodexErr
+impl From<code_core::CodexErr> for MarsError {
+    fn from(err: code_core::CodexErr) -> Self {
+        MarsError::CoreError(err.to_string())
+    }
 }
