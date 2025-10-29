@@ -79,6 +79,22 @@ pub struct MarsConfig {
     /// Default: 300
     pub timeout_seconds: u64,
 
+    /// MCTS simulation depth
+    /// Default: 1
+    pub mcts_simulation_depth: usize,
+
+    /// MCTS exploration weight (UCB coefficient)
+    /// Default: 0.2
+    pub mcts_exploration_weight: f32,
+
+    /// MCTS number of simulations
+    /// Default: 2
+    pub mcts_num_simulations: usize,
+
+    /// MCTS number of actions to generate
+    /// Default: 3
+    pub mcts_num_actions: usize,
+
     /// Enable debug logging
     /// Default: false
     pub debug: bool,
@@ -106,6 +122,10 @@ impl Default for MarsConfig {
             provider_routing: None,
             enable_multi_provider: false,
             timeout_seconds: 300,
+            mcts_simulation_depth: 1,
+            mcts_exploration_weight: 0.2,
+            mcts_num_simulations: 2,
+            mcts_num_actions: 3,
             debug: false,
         }
     }
@@ -237,6 +257,43 @@ impl MarsConfig {
             return false;
         }
         max_tokens.map(|mt| mt <= 4000).unwrap_or(false)
+    }
+
+    /// Set MCTS simulation depth
+    pub fn with_mcts_simulation_depth(mut self, depth: usize) -> Self {
+        self.mcts_simulation_depth = depth;
+        self
+    }
+
+    /// Set MCTS exploration weight
+    pub fn with_mcts_exploration_weight(mut self, weight: f32) -> Self {
+        self.mcts_exploration_weight = weight;
+        self
+    }
+
+    /// Set MCTS number of simulations
+    pub fn with_mcts_num_simulations(mut self, num: usize) -> Self {
+        self.mcts_num_simulations = num;
+        self
+    }
+
+    /// Set MCTS number of actions
+    pub fn with_mcts_num_actions(mut self, num: usize) -> Self {
+        self.mcts_num_actions = num;
+        self
+    }
+
+    /// Get MCTS configuration from Mars config
+    pub fn get_mcts_config(&self) -> crate::mcts::MCTSConfig {
+        crate::mcts::MCTSConfig {
+            simulation_depth: self.mcts_simulation_depth,
+            exploration_weight: self.mcts_exploration_weight,
+            num_simulations: self.mcts_num_simulations,
+            num_actions: self.mcts_num_actions,
+            generation_temperature: 1.0,
+            evaluation_temperature: 0.1,
+            max_history_length: 10,
+        }
     }
 }
 

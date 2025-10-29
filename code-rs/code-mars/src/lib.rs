@@ -34,6 +34,7 @@ pub use types::{MarsEvent, MarsOutput, Solution};
 pub mod agent;
 pub mod aggregator;
 pub mod coordinator;
+pub mod mcts;
 pub mod moa;
 pub mod model_router;
 pub mod prompts;

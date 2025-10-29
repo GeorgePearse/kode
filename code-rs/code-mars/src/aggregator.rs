@@ -33,6 +33,54 @@ impl Aggregator {
         Ok(vec![solution])
     }
 
+    /// Run MCTS aggregation using any LLM provider
+    ///
+    /// This process:
+    /// 1. Uses UCB formula to select promising dialogue states
+    /// 2. Generates diverse actions via LLM completions
+    /// 3. Simulates rollouts to evaluate paths
+    /// 4. Backpropagates values up the reasoning tree
+    pub async fn aggregate_mcts(
+        query: &str,
+        system_prompt: &str,
+        config: crate::mcts::MCTSConfig,
+        provider: &dyn crate::LLMProvider,
+    ) -> Result<Vec<Solution>> {
+        let initial_state = crate::mcts::DialogueState::new(
+            system_prompt.to_string(),
+            vec![],
+            query.to_string(),
+        );
+
+        let mut mcts = crate::mcts::MCTS::new(config);
+        let final_state = mcts.search(initial_state, provider).await?;
+
+        // Extract final answer from conversation history
+        let answer = final_state
+            .conversation_history
+            .last()
+            .map(|msg| msg.content.clone())
+            .unwrap_or_default();
+
+        // Build reasoning trace from conversation
+        let reasoning = final_state
+            .conversation_history
+            .iter()
+            .map(|msg| format!("{}: {}", msg.role, msg.content))
+            .collect::<Vec<_>>()
+            .join("\n\n");
+
+        let solution = Solution::new(
+            "mcts-aggregator".to_string(),
+            reasoning,
+            answer,
+            0.5,
+            mcts.completion_tokens,
+        );
+
+        Ok(vec![solution])
+    }
+
     /// Run RSA-inspired aggregation on solutions
     ///
     /// This process:

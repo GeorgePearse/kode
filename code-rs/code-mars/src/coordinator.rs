@@ -177,6 +177,39 @@ impl MarsCoordinator {
                     }
                 }
             }
+            crate::types::AggregationMethod::MonteCarloTreeSearch => {
+                // MCTS aggregation
+                let provider = self.get_provider();
+                let system_prompt = crate::prompts::MARS_SYSTEM_PROMPT;
+                let mcts_config = self.config.get_mcts_config();
+
+                match Aggregator::aggregate_mcts(
+                    query,
+                    system_prompt,
+                    mcts_config,
+                    provider.as_ref(),
+                )
+                .await
+                {
+                    Ok(aggregated) => {
+                        for solution in aggregated {
+                            let _result = tx
+                                .send(MarsEvent::SolutionsAggregated {
+                                    result_solution_id: solution.id.clone(),
+                                })
+                                .await;
+
+                            self.workspace.add_solution(solution).await;
+                        }
+                    }
+                    Err(e) => {
+                        return Err(crate::MarsError::AggregationError(format!(
+                            "MCTS aggregation failed: {}",
+                            e
+                        )));
+                    }
+                }
+            }
             _ => {
                 // RSA or other aggregation methods
                 let solutions = self.workspace.get_all_solutions().await;
