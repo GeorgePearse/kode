@@ -40,12 +40,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          # Create a fresh repo in the site directory for deployment
           cd site
+
+          # Add .nojekyll to disable Jekyll processing
+          touch .nojekyll
+
+          # Initialize git repo
           git init
-          git add -A
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git add -A
           git commit -m "Deploy documentation"
+
+          # Configure credential helper
           git config --local credential.helper store
-          echo "https://oauth2:${{ github.token }}@github.com" > ~/.git-credentials
+          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+
+          # Push to gh-pages
           git push -f https://github.com/${{ github.repository }}.git HEAD:gh-pages
