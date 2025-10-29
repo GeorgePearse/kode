@@ -100,6 +100,62 @@ kode demonstrates key patterns in modern AI agent design:
 
 
 &ensp;
+## Roadmap & Future Plans
+
+### Visual Agent Forking (Planned)
+
+A file finder-style TUI interface for visually managing agent task branches and orchestration:
+
+**Concept:**
+- **File Finder Layout** – Hierarchical tree view of agent forks and task variants, similar to VS Code's file explorer or FZF preview pane
+- **Task Branching** – Visually fork agent tasks to explore multiple solution paths in parallel
+- **Real-time Comparison** – Side-by-side diff view of different agent implementations
+- **Branch Selection** – Quick navigation and selection between agent variants using arrow keys, fuzzy search, and preview
+- **Convergence Control** – Choose which forked branch to keep, merge, or discard before consolidating back into the main conversation
+
+**Use Cases:**
+- Compare how different agents (`/code` with Claude vs Gemini vs GPT-5) would solve the same task
+- Explore multiple architectural approaches without losing context
+- Test risky refactorings in isolated branches before committing
+- Build decision trees for complex multi-step problems where each agent explores different options
+
+**Implementation approach:**
+- Tree-based rendering with collapsible branches
+- Integrated with Auto Drive for seamless orchestration
+- Keyboard-driven navigation (arrows, Enter to select, 'd' to delete branch, 'm' to merge)
+- Status indicators: running, completed, failed, pending user review
+
+### Distributed Tracing & Observability (Planned)
+
+Comprehensive trace capture and visualization for agent execution flows:
+
+**Concept:**
+- **Distributed Tracing** – Full request/response traces across agent orchestration, API calls, and tool execution
+- **Trace Storage** – Persistent storage of execution traces for audit, debugging, and performance analysis
+- **Timeline Visualization** – Waterfall-style trace visualization showing dependencies and durations
+- **Root Cause Analysis** – Drill-down into specific traces to understand failures and performance bottlenecks
+
+**Integration Options:**
+- **SigNoz** – Open-source, self-hosted observability platform with metrics, traces, and logs in a single dashboard (similar UX to Datadog)
+- **Apache SkyWalking** – APM-focused platform with strong multi-language support and cloud-native optimizations
+- **OneUptime** – Self-hosted alternative combining traces, logs, uptime monitoring, and incident management
+- **Local Storage** – Optional built-in trace storage using SQLite or PostgreSQL for teams preferring on-device data
+
+**Use Cases:**
+- Debug why an agent fork took longer than expected
+- Trace API latency issues across multiple agent calls
+- Audit compliance: store and review all agent decisions and tool invocations
+- Performance profiling of `/auto` multi-step orchestrations
+- Export traces for external analysis or compliance reporting
+
+**Implementation approach:**
+- OpenTelemetry instrumentation throughout kode for standardized trace collection
+- Optional backend configuration (SigNoz, SkyWalking, OneUptime, or local)
+- Inline trace inspection via `/traces` command with filters and search
+- Automatic trace linking between parent and child agent tasks
+- Export as JSON, OTLP, or integration-specific formats
+
+&ensp;
 ## Quickstart
 
 ### Run
