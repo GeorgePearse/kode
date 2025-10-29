@@ -1,0 +1,4574 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A fast, local coding agent for your terminal">
+      
+      
+      
+        <link rel="canonical" href="https://georgepearse.github.io/kode/config/">
+      
+      
+        <link rel="prev" href="../slash-commands/">
+      
+      
+        <link rel="next" href="../authentication/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>Configuration - kode</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#config" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="kode" class="md-header__button md-logo" aria-label="kode" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            kode
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/GeorgePearse/kode" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kode
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../install/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../slash-commands/" class="md-tabs__link">
+          
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../advanced/" class="md-tabs__link">
+          
+  
+  Advanced
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../features/auto-drive/architecture/" class="md-tabs__link">
+          
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../fork-enhancements/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../history_render_cache_bridge/" class="md-tabs__link">
+          
+  
+  Technical Deep Dives
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../release_management/" class="md-tabs__link">
+          
+  
+  Maintenance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../references/" class="md-tabs__link">
+          
+  
+  References
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../contributing/" class="md-tabs__link">
+          
+  
+  Contribution
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../license/" class="md-tabs__link">
+          
+  
+  Legal
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="kode" class="md-nav__button md-logo" aria-label="kode" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    kode
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/GeorgePearse/kode" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kode
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started Details
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started Details
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slash-commands/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    <span class="md-ellipsis">
+      model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_providers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="model_providers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#azure-model-provider-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Azure model provider example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-provider-network-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per-provider network tuning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-provider network tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_max_retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      request_max_retries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream_max_retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      stream_max_retries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream_idle_timeout_ms" class="md-nav__link">
+    <span class="md-ellipsis">
+      stream_idle_timeout_ms
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_provider
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#approval_policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      approval_policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      agents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      profiles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_reasoning_effort" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_reasoning_effort
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_reasoning_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_reasoning_summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_verbosity" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_verbosity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_supports_reasoning_summaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_supports_reasoning_summaries
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      sandbox_mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#approval-presets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Approval presets
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCP Servers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP Servers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#server-transport-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server transport configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server transport configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#streamable-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streamable HTTP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other configuration options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subagents" class="md-nav__link">
+    <span class="md-ellipsis">
+      subagents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      validation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disable_response_storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      disable_response_storage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="disable_response_storage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#managing-mcp-servers-from-cli-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      Managing MCP servers from CLI (experimental)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shell_environment_policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      shell_environment_policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#otel" class="md-nav__link">
+    <span class="md-ellipsis">
+      otel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="otel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#event-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      Event catalog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#choosing-an-exporter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing an exporter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notify" class="md-nav__link">
+    <span class="md-ellipsis">
+      notify
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      history
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file_opener" class="md-nav__link">
+    <span class="md-ellipsis">
+      file_opener
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hide_agent_reasoning" class="md-nav__link">
+    <span class="md-ellipsis">
+      hide_agent_reasoning
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show_raw_agent_reasoning" class="md-nav__link">
+    <span class="md-ellipsis">
+      show_raw_agent_reasoning
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_context_window" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_context_window
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_max_output_tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_max_output_tokens
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project_doc_max_bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      project_doc_max_bytes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project_doc_fallback_filenames" class="md-nav__link">
+    <span class="md-ellipsis">
+      project_doc_fallback_filenames
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      tui
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tui">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-drive-observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto Drive Observer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Hooks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Commands
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Config reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../THEME_CONFIG/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Theme Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/basic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Basic Usage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Advanced Topics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sandbox Mode
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upstream-mcp-implementation-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upstream-mcp-reuse-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Reuse Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Features
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Auto Drive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Auto Drive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/auto-drive/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auto-drive-state-inventory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Inventory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auto-drive-phase-migration-TODO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase Migration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prompts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-zed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration - Zed
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auto-qa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auto QA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fork-enhancements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fork Enhancements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/pipeline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pipeline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Aggregation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Aggregation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregation/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregation/moa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MOA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregation/mcts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCTS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregation/rsa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RSA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Technical Deep Dives
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Technical Deep Dives
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    History & Caching
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            History & Caching
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../history_render_cache_bridge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History Render Cache Bridge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../history_state_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History State Schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/history-debugging/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History Debugging
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/history-invariants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History Invariants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    TUI & UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            TUI & UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui-card-themes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Card Themes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui-chatwidget-refactor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat Widget Refactor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Upstream
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            Upstream
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upstream-acp-merge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ACP Merge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upstream-mcp-implementation-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Performance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_4">
+            <span class="md-nav__icon md-icon"></span>
+            Performance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Benchmarks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_5">
+            <span class="md-nav__icon md-icon"></span>
+            Configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Config Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_6" id="__nav_7_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_6">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Maintenance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Maintenance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release_management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../maintenance/prompt-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompt Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../maintenance/upstream-diff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Upstream Diff
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    References
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            References
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    References
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../platform-sandboxing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Sandboxing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../markdown_showcase/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markdown Showcase
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-source-fund/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open Source Fund
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../zdr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ZDR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experimental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Experimental
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HOMEBREW/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Homebrew
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interrupt-resume-postmortem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interrupt & Resume
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contribution
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Contribution
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CLA/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Legal
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Legal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    <span class="md-ellipsis">
+      model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_providers" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_providers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="model_providers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#azure-model-provider-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Azure model provider example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-provider-network-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per-provider network tuning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-provider network tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_max_retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      request_max_retries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream_max_retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      stream_max_retries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream_idle_timeout_ms" class="md-nav__link">
+    <span class="md-ellipsis">
+      stream_idle_timeout_ms
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_provider
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#approval_policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      approval_policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      agents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      profiles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_reasoning_effort" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_reasoning_effort
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_reasoning_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_reasoning_summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_verbosity" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_verbosity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_supports_reasoning_summaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_supports_reasoning_summaries
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      sandbox_mode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#approval-presets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Approval presets
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCP Servers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP Servers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#server-transport-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server transport configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server transport configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#streamable-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streamable HTTP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other configuration options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subagents" class="md-nav__link">
+    <span class="md-ellipsis">
+      subagents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      validation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disable_response_storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      disable_response_storage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="disable_response_storage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#managing-mcp-servers-from-cli-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      Managing MCP servers from CLI (experimental)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shell_environment_policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      shell_environment_policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#otel" class="md-nav__link">
+    <span class="md-ellipsis">
+      otel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="otel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#event-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      Event catalog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#choosing-an-exporter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing an exporter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notify" class="md-nav__link">
+    <span class="md-ellipsis">
+      notify
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      history
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file_opener" class="md-nav__link">
+    <span class="md-ellipsis">
+      file_opener
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hide_agent_reasoning" class="md-nav__link">
+    <span class="md-ellipsis">
+      hide_agent_reasoning
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show_raw_agent_reasoning" class="md-nav__link">
+    <span class="md-ellipsis">
+      show_raw_agent_reasoning
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_context_window" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_context_window
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model_max_output_tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      model_max_output_tokens
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project_doc_max_bytes" class="md-nav__link">
+    <span class="md-ellipsis">
+      project_doc_max_bytes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project_doc_fallback_filenames" class="md-nav__link">
+    <span class="md-ellipsis">
+      project_doc_fallback_filenames
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui" class="md-nav__link">
+    <span class="md-ellipsis">
+      tui
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="tui">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-drive-observer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto Drive Observer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Hooks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project Commands
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#config-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Config reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="config">Config<a class="headerlink" href="#config" title="Permanent link">&para;</a></h1>
+<!-- markdownlint-disable MD012 MD013 MD028 MD033 -->
+
+<p>Codex supports several mechanisms for setting config values:</p>
+<ul>
+<li>Config-specific command-line flags, such as <code>--model o3</code> (highest precedence).</li>
+<li>A generic <code>-c</code>/<code>--config</code> flag that takes a <code>key=value</code> pair, such as <code>--config model="o3"</code>.</li>
+<li>The key can contain dots to set a value deeper than the root, e.g. <code>--config model_providers.openai.wire_api="chat"</code>.</li>
+<li>For consistency with <code>config.toml</code>, values are a string in TOML format rather than JSON format, so use <code>key='{a = 1, b = 2}'</code> rather than <code>key='{"a": 1, "b": 2}'</code>.<ul>
+<li>The quotes around the value are necessary, as without them your shell would split the config argument on spaces, resulting in <code>codex</code> receiving <code>-c key={a</code> with (invalid) additional arguments <code>=</code>, <code>1,</code>, <code>b</code>, <code>=</code>, <code>2}</code>.</li>
+</ul>
+</li>
+<li>Values can contain any TOML object, such as <code>--config shell_environment_policy.include_only='["PATH", "HOME", "USER"]'</code>.</li>
+<li>If <code>value</code> cannot be parsed as a valid TOML value, it is treated as a string value. This means that <code>-c model='"o3"'</code> and <code>-c model=o3</code> are equivalent.<ul>
+<li>In the first case, the value is the TOML string <code>"o3"</code>, while in the second the value is <code>o3</code>, which is not valid TOML and therefore treated as the TOML string <code>"o3"</code>.</li>
+<li>Because quotes are interpreted by one's shell, <code>-c key="true"</code> will be correctly interpreted in TOML as <code>key = true</code> (a boolean) and not <code>key = "true"</code> (a string). If for some reason you needed the string <code>"true"</code>, you would need to use <code>-c key='"true"'</code> (note the two sets of quotes).</li>
+</ul>
+</li>
+<li>The <code>$CODE_HOME/config.toml</code> configuration file. <code>CODE_HOME</code> defaults to <code>~/.code</code>; Code also reads from <code>$CODEX_HOME</code>/<code>~/.codex</code> for backwards compatibility but only writes to <code>~/.code</code>. (Logs and other state use the same directory.)</li>
+</ul>
+<p>Both the <code>--config</code> flag and the <code>config.toml</code> file support the following options:</p>
+<h2 id="model">model<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
+<p>The model that Codex should use.</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;o3&quot;</span><span class="w">  </span><span class="c1"># overrides the default of &quot;gpt-5&quot;</span>
+</code></pre></div>
+<h2 id="model_providers">model_providers<a class="headerlink" href="#model_providers" title="Permanent link">&para;</a></h2>
+<p>This option lets you override and amend the default set of model providers bundled with Codex. This value is a map where the key is the value to use with <code>model_provider</code> to select the corresponding provider.</p>
+<p>For example, if you wanted to add a provider that uses the OpenAI 4o model via the chat completions API, then you could add the following configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Recall that in TOML, root keys must be listed before tables.</span>
+<span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpt-4o&quot;</span>
+<span class="n">model_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;openai-chat-completions&quot;</span>
+
+<span class="k">[model_providers.openai-chat-completions]</span>
+<span class="c1"># Name of the provider that will be displayed in the Codex UI.</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OpenAI using Chat Completions&quot;</span>
+<span class="c1"># The path `/chat/completions` will be amended to this URL to make the POST</span>
+<span class="c1"># request for the chat completions.</span>
+<span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://api.openai.com/v1&quot;</span>
+<span class="c1"># If `env_key` is set, identifies an environment variable that must be set when</span>
+<span class="c1"># using Codex with this provider. The value of the environment variable must be</span>
+<span class="c1"># non-empty and will be used in the `Bearer TOKEN` HTTP header for the POST request.</span>
+<span class="n">env_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OPENAI_API_KEY&quot;</span>
+<span class="c1"># Valid values for wire_api are &quot;chat&quot; and &quot;responses&quot;. Defaults to &quot;chat&quot; if omitted.</span>
+<span class="n">wire_api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;chat&quot;</span>
+<span class="c1"># If necessary, extra query params that need to be added to the URL.</span>
+<span class="c1"># See the Azure example below.</span>
+<span class="n">query_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div>
+<p>Note this makes it possible to use Codex CLI with non-OpenAI models, so long as they use a wire API that is compatible with the OpenAI chat completions API. For example, you could define the following provider to use Codex CLI with Ollama running locally:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[model_providers.ollama]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Ollama&quot;</span>
+<span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://localhost:11434/v1&quot;</span>
+</code></pre></div>
+<p>Or a third-party provider (using a distinct environment variable for the API key):</p>
+<div class="highlight"><pre><span></span><code><span class="k">[model_providers.mistral]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Mistral&quot;</span>
+<span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://api.mistral.ai/v1&quot;</span>
+<span class="n">env_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;MISTRAL_API_KEY&quot;</span>
+</code></pre></div>
+<p>It is also possible to configure a provider to include extra HTTP headers with a request. These can be hardcoded values (<code>http_headers</code>) or values read from environment variables (<code>env_http_headers</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="k">[model_providers.example]</span>
+<span class="c1"># name, base_url, ...</span>
+
+<span class="c1"># This will add the HTTP header `X-Example-Header` with value `example-value`</span>
+<span class="c1"># to each request to the model provider.</span>
+<span class="n">http_headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;X-Example-Header&quot;</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;example-value&quot;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1"># This will add the HTTP header `X-Example-Features` with the value of the</span>
+<span class="c1"># `EXAMPLE_FEATURES` environment variable to each request to the model provider</span>
+<span class="c1"># _if_ the environment variable is set and its value is non-empty.</span>
+<span class="n">env_http_headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;X-Example-Features&quot;</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;EXAMPLE_FEATURES&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="azure-model-provider-example">Azure model provider example<a class="headerlink" href="#azure-model-provider-example" title="Permanent link">&para;</a></h3>
+<p>Note that Azure requires <code>api-version</code> to be passed as a query parameter, so be sure to specify it as part of <code>query_params</code> when defining the Azure provider:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[model_providers.azure]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Azure&quot;</span>
+<span class="c1"># Make sure you set the appropriate subdomain for this URL.</span>
+<span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://YOUR_PROJECT_NAME.openai.azure.com/openai&quot;</span>
+<span class="n">env_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;AZURE_OPENAI_API_KEY&quot;</span><span class="w">  </span><span class="c1"># Or &quot;OPENAI_API_KEY&quot;, whichever you use.</span>
+<span class="n">query_params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">api-version</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;2025-04-01-preview&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="n">wire_api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;responses&quot;</span>
+</code></pre></div>
+<p>Export your key before launching Codex: <code>export AZURE_OPENAI_API_KEY=…</code></p>
+<h3 id="per-provider-network-tuning">Per-provider network tuning<a class="headerlink" href="#per-provider-network-tuning" title="Permanent link">&para;</a></h3>
+<p>The following optional settings control retry behaviour and streaming idle timeouts <strong>per model provider</strong>. They must be specified inside the corresponding <code>[model_providers.&lt;id&gt;]</code> block in <code>config.toml</code>. (Older releases accepted top‑level keys; those are now ignored.)</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[model_providers.openai]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OpenAI&quot;</span>
+<span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://api.openai.com/v1&quot;</span>
+<span class="n">env_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OPENAI_API_KEY&quot;</span>
+<span class="c1"># network tuning overrides (all optional; falls back to built‑in defaults)</span>
+<span class="n">request_max_retries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w">            </span><span class="c1"># retry failed HTTP requests</span>
+<span class="n">stream_max_retries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w">            </span><span class="c1"># retry dropped SSE streams</span>
+<span class="n">stream_idle_timeout_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300000</span><span class="w">    </span><span class="c1"># 5m idle timeout</span>
+</code></pre></div>
+<h4 id="request_max_retries">request_max_retries<a class="headerlink" href="#request_max_retries" title="Permanent link">&para;</a></h4>
+<p>How many times Codex will retry a failed HTTP request to the model provider. Defaults to <code>4</code>.</p>
+<h4 id="stream_max_retries">stream_max_retries<a class="headerlink" href="#stream_max_retries" title="Permanent link">&para;</a></h4>
+<p>Number of times Codex will attempt to reconnect when a streaming response is interrupted. Defaults to <code>5</code>.</p>
+<h4 id="stream_idle_timeout_ms">stream_idle_timeout_ms<a class="headerlink" href="#stream_idle_timeout_ms" title="Permanent link">&para;</a></h4>
+<p>How long Codex will wait for activity on a streaming response before treating the connection as lost. Defaults to <code>300_000</code> (5 minutes).</p>
+<h2 id="model_provider">model_provider<a class="headerlink" href="#model_provider" title="Permanent link">&para;</a></h2>
+<p>Identifies which provider to use from the <code>model_providers</code> map. Defaults to <code>"openai"</code>. You can override the <code>base_url</code> for the built-in <code>openai</code> provider via the <code>OPENAI_BASE_URL</code> environment variable and force the wire protocol (<code>"responses"</code> or <code>"chat"</code>) with <code>OPENAI_WIRE_API</code>.</p>
+<p>Note that if you override <code>model_provider</code>, then you likely want to override
+<code>model</code>, as well. For example, if you are running ollama with Mistral locally,
+then you would need to add the following to your config in addition to the new entry in the <code>model_providers</code> map:</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ollama&quot;</span>
+<span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mistral&quot;</span>
+</code></pre></div>
+<h2 id="approval_policy">approval_policy<a class="headerlink" href="#approval_policy" title="Permanent link">&para;</a></h2>
+<p>Determines when the user should be prompted to approve whether Codex can execute a command:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Codex has hardcoded logic that defines a set of &quot;trusted&quot; commands.</span>
+<span class="c1"># Setting the approval_policy to `untrusted` means that Codex will prompt the</span>
+<span class="c1"># user before running a command not in the &quot;trusted&quot; set.</span>
+<span class="c1">#</span>
+<span class="c1"># See https://github.com/openai/codex/issues/1260 for the plan to enable</span>
+<span class="c1"># end-users to define their own trusted commands.</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;untrusted&quot;</span>
+</code></pre></div>
+<p>If you want to be notified whenever a command fails, use "on-failure":</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># If the command fails when run in the sandbox, Codex asks for permission to</span>
+<span class="c1"># retry the command outside the sandbox.</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;on-failure&quot;</span>
+</code></pre></div>
+<p>If you want the model to run until it decides that it needs to ask you for escalated permissions, use "on-request":</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># The model decides when to escalate</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;on-request&quot;</span>
+</code></pre></div>
+<p>Alternatively, you can have the model run until it is done, and never ask to run a command with escalated permissions:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># User is never prompted: if the command fails, Codex will automatically try</span>
+<span class="c1"># something out. Note the `exec` subcommand always uses this mode.</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;never&quot;</span>
+</code></pre></div>
+<h2 id="agents">agents<a class="headerlink" href="#agents" title="Permanent link">&para;</a></h2>
+<p>Use <code>[[agents]]</code> blocks to register additional CLI programs that Codex can launch as peers. Each block maps a short <code>name</code> (referenced elsewhere in the config) to the command to execute, optional default flags, and environment variables.</p>
+<blockquote>
+<p><strong>Note:</strong> Built-in model slugs (for example <code>code-gpt-5-codex</code>, <code>claude-sonnet-4.5</code>) automatically inject the correct <code>--model</code> or <code>-m</code> flag. To avoid conflicting arguments, Codex strips any <code>--model</code>/<code>-m</code> flags you place in <code>args</code>, <code>args_read_only</code>, or <code>args_write</code> before launching the agent. If you need a new model variant, add a slug in <code>code-rs/core/src/agent_defaults.rs</code> (or set an environment variable consumed by the CLI) rather than pinning the flag here.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="k">[[agents]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;context-collector&quot;</span>
+<span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gemini&quot;</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">read-only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Gemini long-context helper that summarizes large repositories&quot;</span>
+<span class="n">args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;-y&quot;</span><span class="p">]</span>
+<span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">GEMINI_API_KEY</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>When <code>enabled = true</code>, the agent is surfaced in the TUI picker and any sub-agent commands that reference it. Setting <code>read-only = true</code> forces the agent to request approval before modifying files even if the primary session permits writes.</p>
+<h2 id="profiles">profiles<a class="headerlink" href="#profiles" title="Permanent link">&para;</a></h2>
+<p>A <em>profile</em> is a collection of configuration values that can be set together. Multiple profiles can be defined in <code>config.toml</code> and you can specify the one you
+want to use at runtime via the <code>--profile</code> flag.</p>
+<p>Here is an example of a <code>config.toml</code> that defines multiple profiles:</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;o3&quot;</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;untrusted&quot;</span>
+<span class="n">disable_response_storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+
+<span class="c1"># Setting `profile` is equivalent to specifying `--profile o3` on the command</span>
+<span class="c1"># line, though the `--profile` flag can still be used to override this value.</span>
+<span class="n">profile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;o3&quot;</span>
+
+<span class="k">[model_providers.openai-chat-completions]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OpenAI using Chat Completions&quot;</span>
+<span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://api.openai.com/v1&quot;</span>
+<span class="n">env_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;OPENAI_API_KEY&quot;</span>
+<span class="n">wire_api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;chat&quot;</span>
+
+<span class="k">[profiles.o3]</span>
+<span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;o3&quot;</span>
+<span class="n">model_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;openai&quot;</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;never&quot;</span>
+<span class="n">model_reasoning_effort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;high&quot;</span>
+<span class="n">model_reasoning_summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;detailed&quot;</span>
+
+<span class="k">[profiles.gpt3]</span>
+<span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpt-3.5-turbo&quot;</span>
+<span class="n">model_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;openai-chat-completions&quot;</span>
+
+<span class="k">[profiles.zdr]</span>
+<span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;o3&quot;</span>
+<span class="n">model_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;openai&quot;</span>
+<span class="n">approval_policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;on-failure&quot;</span>
+<span class="n">disable_response_storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<p>Users can specify config values at multiple levels. Order of precedence is as follows:</p>
+<ol>
+<li>custom command-line argument, e.g., <code>--model o3</code></li>
+<li>as part of a profile, where the <code>--profile</code> is specified via a CLI (or in the config file itself)</li>
+<li>as an entry in <code>config.toml</code>, e.g., <code>model = "o3"</code></li>
+<li>the default value that comes with Codex CLI (i.e., Codex CLI defaults to <code>gpt-5</code>)</li>
+</ol>
+<h2 id="model_reasoning_effort">model_reasoning_effort<a class="headerlink" href="#model_reasoning_effort" title="Permanent link">&para;</a></h2>
+<p>If the selected model is known to support reasoning (for example: <code>o3</code>, <code>o4-mini</code>, <code>codex-*</code>, <code>gpt-5</code>, <code>gpt-5-codex</code>), reasoning is enabled by default when using the Responses API. As explained in the <a href="https://platform.openai.com/docs/guides/reasoning?api-mode=responses#get-started-with-reasoning">OpenAI Platform documentation</a>, this can be set to:</p>
+<ul>
+<li><code>"minimal"</code></li>
+<li><code>"low"</code></li>
+<li><code>"medium"</code> (default)</li>
+<li><code>"high"</code></li>
+</ul>
+<p>Note: to minimize reasoning, choose <code>"minimal"</code>.</p>
+<h2 id="model_reasoning_summary">model_reasoning_summary<a class="headerlink" href="#model_reasoning_summary" title="Permanent link">&para;</a></h2>
+<p>If the model name starts with <code>"o"</code> (as in <code>"o3"</code> or <code>"o4-mini"</code>) or <code>"codex"</code>, reasoning is enabled by default when using the Responses API. As explained in the <a href="https://platform.openai.com/docs/guides/reasoning?api-mode=responses#reasoning-summaries">OpenAI Platform documentation</a>, this can be set to:</p>
+<ul>
+<li><code>"auto"</code> (default)</li>
+<li><code>"concise"</code></li>
+<li><code>"detailed"</code></li>
+</ul>
+<p>To disable reasoning summaries, set <code>model_reasoning_summary</code> to <code>"none"</code> in your config:</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_reasoning_summary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;none&quot;</span><span class="w">  </span><span class="c1"># disable reasoning summaries</span>
+</code></pre></div>
+<h2 id="model_verbosity">model_verbosity<a class="headerlink" href="#model_verbosity" title="Permanent link">&para;</a></h2>
+<p>Controls output length/detail on GPT‑5 family models when using the Responses API. Supported values:</p>
+<ul>
+<li><code>"low"</code></li>
+<li><code>"medium"</code> (default when omitted)</li>
+<li><code>"high"</code></li>
+</ul>
+<p>When set, Codex includes a <code>text</code> object in the request payload with the configured verbosity, for example: <code>"text": { "verbosity": "low" }</code>.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpt-5&quot;</span>
+<span class="n">model_verbosity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;low&quot;</span>
+</code></pre></div>
+<p>Note: This applies only to providers using the Responses API. Chat Completions providers are unaffected.</p>
+<h2 id="model_supports_reasoning_summaries">model_supports_reasoning_summaries<a class="headerlink" href="#model_supports_reasoning_summaries" title="Permanent link">&para;</a></h2>
+<p>By default, <code>reasoning</code> is only set on requests to OpenAI models that are known to support them. To force <code>reasoning</code> to set on requests to the current model, you can force this behavior by setting the following in <code>config.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">model_supports_reasoning_summaries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<h2 id="sandbox_mode">sandbox_mode<a class="headerlink" href="#sandbox_mode" title="Permanent link">&para;</a></h2>
+<p>Codex executes model-generated shell commands inside an OS-level sandbox.</p>
+<p>In most cases you can pick the desired behaviour with a single option:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># same as `--sandbox read-only`</span>
+<span class="n">sandbox_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;read-only&quot;</span>
+</code></pre></div>
+<p>The default policy is <code>read-only</code>, which means commands can read any file on
+disk, but attempts to write a file or access the network will be blocked.</p>
+<p>A more relaxed policy is <code>workspace-write</code>. When specified, the current working directory for the Codex task will be writable (as well as <code>$TMPDIR</code> on macOS). Note that the CLI defaults to using the directory where it was spawned as <code>cwd</code>, though this can be overridden using <code>--cwd/-C</code>.</p>
+<p>Historically, Codex allowed writes inside the top‑level <code>.git/</code> folder when using <code>workspace-write</code>. That permissive behavior is the default again. If you want to protect <code>.git</code> under <code>workspace-write</code>, you can opt out via <code>[sandbox_workspace_write].allow_git_writes = false</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># same as `--sandbox workspace-write`</span>
+<span class="n">sandbox_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;workspace-write&quot;</span>
+
+<span class="c1"># Extra settings that only apply when `sandbox = &quot;workspace-write&quot;`.</span>
+<span class="k">[sandbox_workspace_write]</span>
+<span class="c1"># By default, the cwd for the Codex session will be writable as well as $TMPDIR</span>
+<span class="c1"># (if set) and /tmp (if it exists). Setting the respective options to `true`</span>
+<span class="c1"># will override those defaults.</span>
+<span class="n">exclude_tmpdir_env_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="n">exclude_slash_tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+
+<span class="c1"># Optional list of _additional_ writable roots beyond $TMPDIR and /tmp.</span>
+
+<span class="c1"># Protect top-level .git under writable roots (default is true = allow writes)</span>
+<span class="n">allow_git_writes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">writable_roots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/Users/YOU/.pyenv/shims&quot;</span><span class="p">]</span>
+
+<span class="c1"># Allow the command being run inside the sandbox to make outbound network</span>
+<span class="c1"># requests. Disabled by default.</span>
+<span class="n">network_access</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</code></pre></div>
+<p>To disable sandboxing altogether, specify <code>danger-full-access</code> like so:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># same as `--sandbox danger-full-access`</span>
+<span class="n">sandbox_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;danger-full-access&quot;</span>
+</code></pre></div>
+<p>This is reasonable to use if Codex is running in an environment that provides its own sandboxing (such as a Docker container) such that further sandboxing is unnecessary.</p>
+<p>Though using this option may also be necessary if you try to use Codex in environments where its native sandboxing mechanisms are unsupported, such as older Linux kernels or on Windows.</p>
+<h2 id="approval-presets">Approval presets<a class="headerlink" href="#approval-presets" title="Permanent link">&para;</a></h2>
+<p>Codex provides three main Approval Presets:</p>
+<ul>
+<li>Read Only: Codex can read files and answer questions; edits, running commands, and network access require approval.</li>
+<li>Auto: Codex can read files, make edits, and run commands in the workspace without approval; asks for approval outside the workspace or for network access.</li>
+<li>Full Access: Full disk and network access without prompts; extremely risky.</li>
+</ul>
+<p>You can further customize how Codex runs at the command line using the <code>--ask-for-approval</code> and <code>--sandbox</code> options.</p>
+<h2 id="mcp-servers">MCP Servers<a class="headerlink" href="#mcp-servers" title="Permanent link">&para;</a></h2>
+<p>You can configure Codex to use <a href="https://modelcontextprotocol.io/about">MCP servers</a> to give Codex access to external applications, resources, or services such as <a href="https://github.com/microsoft/playwright-mcp">Playwright</a>, <a href="https://www.figma.com/blog/design-context-everywhere-you-build/">Figma</a>, <a href="https://context7.com/">documentation</a>, and <a href="https://github.com/mcp?utm_source=blog-source&amp;utm_campaign=mcp-registry-server-launch-2025">more</a>.</p>
+<h3 id="server-transport-configuration">Server transport configuration<a class="headerlink" href="#server-transport-configuration" title="Permanent link">&para;</a></h3>
+<p>Each server may set <code>startup_timeout_sec</code> to adjust how long Codex waits for it to start and respond to a tools listing. The default is <code>10</code> seconds.
+Similarly, <code>tool_timeout_sec</code> limits how long individual tool calls may run (default: <code>60</code> seconds), and Codex will fall back to the default when this value is omitted.</p>
+<p>This config option is comparable to how Claude and Cursor define <code>mcpServers</code> in their respective JSON config files, though because Codex uses TOML for its config language, the format is slightly different. For example, the following config in JSON:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;server-name&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;-y&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mcp-server&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;value&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Should be represented as follows in <code>~/.code/config.toml</code> (Code will also read the legacy <code>~/.codex/config.toml</code> if it exists):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># The top-level table name must be `mcp_servers`</span>
+<span class="c1"># The sub-table name (`server-name` in this example) can be anything you would like.</span>
+<span class="k">[mcp_servers.server-name]</span>
+<span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span>
+<span class="c1"># Optional</span>
+<span class="n">args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;-y&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mcp-server&quot;</span><span class="p">]</span>
+<span class="c1"># Optional: propagate additional env vars to the MVP server.</span>
+<span class="c1"># A default whitelist of env vars will be propagated to the MCP server.</span>
+<span class="c1"># https://github.com/openai/codex/blob/main/codex-rs/rmcp-client/src/utils.rs#L82</span>
+<span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;API_KEY&quot;</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;value&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h4 id="streamable-http">Streamable HTTP<a class="headerlink" href="#streamable-http" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Streamable HTTP requires the experimental rmcp client</span>
+<span class="n">experimental_use_rmcp_client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="k">[mcp_servers.figma]</span>
+<span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://127.0.0.1:3845/mcp&quot;</span>
+<span class="c1"># Optional bearer token to be passed into an `Authorization: Bearer &lt;token&gt;` header</span>
+<span class="c1"># Use this with caution because the token is in plaintext.</span>
+<span class="n">bearer_token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;token&gt;&quot;</span>
+</code></pre></div>
+<p>Refer to the MCP CLI commands for oauth login</p>
+<h3 id="other-configuration-options">Other configuration options<a class="headerlink" href="#other-configuration-options" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Optional: override the default 10s startup timeout</span>
+<span class="n">startup_timeout_sec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span>
+<span class="c1"># Optional: override the default 60s per-tool timeout</span>
+<span class="n">tool_timeout_sec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span>
+</code></pre></div>
+<h2 id="subagents">subagents<a class="headerlink" href="#subagents" title="Permanent link">&para;</a></h2>
+<p>Sub-agents are orchestrated helper workflows you can trigger with slash commands (for example <code>/plan</code>, <code>/solve</code>, <code>/code</code>). Each entry under <code>[[subagents.commands]]</code> defines the slash command name, whether spawned agents run in read-only mode, which <code>agents</code> to launch, and extra guidance for both the orchestrator (Code) and the individual agents.</p>
+<p>By default (when no <code>[[agents]]</code> are configured) Code advertises these model slugs for multi-agent runs: <code>code-gpt-5</code>, <code>claude-sonnet-4.5</code>, <code>claude-opus-4.1</code>, <code>gemini-2.5-pro</code>, <code>gemini-2.5-flash</code>, <code>qwen-3-coder</code>, and <code>code-gpt-5-codex</code>. The cloud counterpart, <code>cloud-gpt-5-codex</code>, only appears when <code>CODE_ENABLE_CLOUD_AGENT_MODEL=1</code> is set. You can override the list by defining <code>[[agents]]</code> entries or by specifying <code>agents = [ … ]</code> on a given <code>[[subagents.commands]]</code> entry.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[[subagents.commands]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;context&quot;</span>
+<span class="n">read-only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">agents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;context-collector&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;code-gpt-5&quot;</span><span class="p">]</span>
+<span class="n">orchestrator-instructions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Coordinate a context sweep before coding. Ask each agent to emit concise, linked summaries of relevant files and tooling the primary task might need.&quot;</span>
+<span class="n">agent-instructions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Summarize the repository areas most relevant to the user&#39;s request. List file paths, rationale, and suggested follow-up scripts to run. Keep the reply under 2,000 tokens.&quot;</span>
+</code></pre></div>
+<p>With the example above you can run <code>/context</code> inside the TUI to create a summary cell that the main <code>/code</code> turn can reference later. Because <code>context-collector</code> is an ordinary agent, any command-line static analysis utilities it invokes (such as your blast radius tool) should be described in the <code>agent-instructions</code> so the orchestrator launches the right workflow. You can also customise the built-in commands by providing an entry with the same <code>name</code> (<code>plan</code>, <code>solve</code>, or <code>code</code>) and pointing their <code>agents</code> list at your long-context helper.</p>
+<h2 id="validation">validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<p>Controls the quick validation harness that runs before applying patches. The
+harness now activates automatically whenever at least one validation group is
+enabled. Use <code>[validation.groups]</code> for high-level toggles and the nested
+<code>[validation.tools]</code> table for per-tool overrides:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[validation.groups]</span>
+<span class="n">functional</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">stylistic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+
+<span class="k">[validation.tools]</span>
+<span class="n">shellcheck</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">markdownlint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">hadolint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">yamllint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">cargo-check</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">tsc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">eslint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">mypy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">pyright</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">phpstan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">psalm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">golangci-lint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">shfmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">prettier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<p>Functional checks stay enabled by default to catch regressions in the touched
+code, while stylistic linters default to off so teams can opt in when they want
+formatting feedback.</p>
+<p>With functional checks enabled, Codex automatically detects the languages
+affected by a patch and schedules the appropriate tools:</p>
+<ul>
+<li><code>cargo-check</code> for Rust workspaces (scoped to touched manifests)</li>
+<li><code>tsc --noEmit</code> and <code>eslint --max-warnings=0</code> for TypeScript/JavaScript files</li>
+<li><code>mypy</code> and <code>pyright</code> for Python modules</li>
+<li><code>phpstan</code>/<code>psalm</code> for PHP projects with matching config or Composer entries</li>
+<li><code>golangci-lint run ./...</code> for Go modules alongside the existing JSON/TOML/YAML
+  syntax checks</li>
+</ul>
+<p>Each entry under <code>[validation.tools]</code> can be toggled to disable a specific tool
+or to opt particular checks back in after disabling the entire group.</p>
+<p>When enabled, Codex can also run <code>actionlint</code> against modified workflows. This
+is configured under <code>[github]</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[github]</span>
+<span class="n">actionlint_on_patch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="c1"># Optional: provide an explicit binary path</span>
+<span class="n">actionlint_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/usr/local/bin/actionlint&quot;</span>
+</code></pre></div>
+<h2 id="disable_response_storage">disable_response_storage<a class="headerlink" href="#disable_response_storage" title="Permanent link">&para;</a></h2>
+<p>Currently, customers whose accounts are set to use Zero Data Retention (ZDR) must set <code>disable_response_storage</code> to <code>true</code> so that Codex uses an alternative to the Responses API that works with ZDR:</p>
+<div class="highlight"><pre><span></span><code><span class="n">disable_response_storage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<h3 id="managing-mcp-servers-from-cli-experimental">Managing MCP servers from CLI (experimental)<a class="headerlink" href="#managing-mcp-servers-from-cli-experimental" title="Permanent link">&para;</a></h3>
+<p>You can also manage these entries from the CLI:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Add a server (env can be repeated; `--` separates the launcher command)</span>
+codex<span class="w"> </span>mcp<span class="w"> </span>add<span class="w"> </span>docs<span class="w"> </span>--<span class="w"> </span>docs-server<span class="w"> </span>--port<span class="w"> </span><span class="m">4000</span>
+
+<span class="c1"># List configured servers (pretty table or JSON)</span>
+codex<span class="w"> </span>mcp<span class="w"> </span>list
+codex<span class="w"> </span>mcp<span class="w"> </span>list<span class="w"> </span>--json
+
+<span class="c1"># Show one server (table or JSON)</span>
+codex<span class="w"> </span>mcp<span class="w"> </span>get<span class="w"> </span>docs
+codex<span class="w"> </span>mcp<span class="w"> </span>get<span class="w"> </span>docs<span class="w"> </span>--json
+
+<span class="c1"># Remove a server</span>
+codex<span class="w"> </span>mcp<span class="w"> </span>remove<span class="w"> </span>docs
+
+<span class="c1"># Log in to a streamable HTTP server that supports oauth</span>
+codex<span class="w"> </span>mcp<span class="w"> </span>login<span class="w"> </span>SERVER_NAME
+
+<span class="c1"># Log out from a streamable HTTP server that supports oauth</span>
+codex<span class="w"> </span>mcp<span class="w"> </span><span class="nb">logout</span><span class="w"> </span>SERVER_NAME
+</code></pre></div>
+<h2 id="shell_environment_policy">shell_environment_policy<a class="headerlink" href="#shell_environment_policy" title="Permanent link">&para;</a></h2>
+<p>Codex spawns subprocesses (e.g. when executing a <code>local_shell</code> tool-call suggested by the assistant). By default it now passes <strong>your full environment</strong> to those subprocesses. You can tune this behavior via the <strong><code>shell_environment_policy</code></strong> block in <code>config.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[shell_environment_policy]</span>
+<span class="c1"># inherit can be &quot;all&quot; (default), &quot;core&quot;, or &quot;none&quot;</span>
+<span class="n">inherit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;core&quot;</span>
+<span class="c1"># set to true to *skip* the filter for `&quot;*KEY*&quot;` and `&quot;*TOKEN*&quot;`</span>
+<span class="n">ignore_default_excludes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="c1"># exclude patterns (case-insensitive globs)</span>
+<span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;AWS_*&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;AZURE_*&quot;</span><span class="p">]</span>
+<span class="c1"># force-set / override values</span>
+<span class="n">set</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">CI</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;1&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="c1"># if provided, *only* vars matching these patterns are kept</span>
+<span class="n">include_only</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;HOME&quot;</span><span class="p">]</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>inherit</code></td>
+<td>string</td>
+<td><code>all</code></td>
+<td>Starting template for the environment:<br><code>all</code> (clone full parent env), <code>core</code> (<code>HOME</code>, <code>PATH</code>, <code>USER</code>, …), or <code>none</code> (start empty).</td>
+</tr>
+<tr>
+<td><code>ignore_default_excludes</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>When <code>false</code>, Codex removes any var whose <strong>name</strong> contains <code>KEY</code>, <code>SECRET</code>, or <code>TOKEN</code> (case-insensitive) before other rules run.</td>
+</tr>
+<tr>
+<td><code>exclude</code></td>
+<td>array<string></td>
+<td><code>[]</code></td>
+<td>Case-insensitive glob patterns to drop after the default filter.<br>Examples: <code>"AWS_*"</code>, <code>"AZURE_*"</code>.</td>
+</tr>
+<tr>
+<td><code>set</code></td>
+<td>table<string,string></td>
+<td><code>{}</code></td>
+<td>Explicit key/value overrides or additions – always win over inherited values.</td>
+</tr>
+<tr>
+<td><code>include_only</code></td>
+<td>array<string></td>
+<td><code>[]</code></td>
+<td>If non-empty, a whitelist of patterns; only variables that match <em>one</em> pattern survive the final step. (Generally used with <code>inherit = "all"</code>.)</td>
+</tr>
+</tbody>
+</table>
+<p>The patterns are <strong>glob style</strong>, not full regular expressions: <code>*</code> matches any
+number of characters, <code>?</code> matches exactly one, and character classes like
+<code>[A-Z]</code>/<code>[^0-9]</code> are supported. Matching is always <strong>case-insensitive</strong>. This
+syntax is documented in code as <code>EnvironmentVariablePattern</code> (see
+<code>core/src/config_types.rs</code>).</p>
+<p>If you just need a clean slate with a few custom entries you can write:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[shell_environment_policy]</span>
+<span class="n">inherit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;none&quot;</span>
+<span class="n">set</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">PATH</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;/usr/bin&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">MY_FLAG</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;1&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Currently, <code>CODEX_SANDBOX_NETWORK_DISABLED=1</code> is also added to the environment, assuming network is disabled. This is not configurable.</p>
+<h2 id="otel">otel<a class="headerlink" href="#otel" title="Permanent link">&para;</a></h2>
+<p>Codex can emit <a href="https://opentelemetry.io/">OpenTelemetry</a> <strong>log events</strong> that
+describe each run: outbound API requests, streamed responses, user input,
+tool-approval decisions, and the result of every tool invocation. Export is
+<strong>disabled by default</strong> so local runs remain self-contained. Opt in by adding an
+<code>[otel]</code> table and choosing an exporter.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[otel]</span>
+<span class="n">environment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;staging&quot;</span><span class="w">   </span><span class="c1"># defaults to &quot;dev&quot;</span>
+<span class="n">exporter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;none&quot;</span><span class="w">          </span><span class="c1"># defaults to &quot;none&quot;; set to otlp-http or otlp-grpc to send events</span>
+<span class="n">log_user_prompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">    </span><span class="c1"># defaults to false; redact prompt text unless explicitly enabled</span>
+</code></pre></div>
+<p>Codex tags every exported event with <code>service.name = $ORIGINATOR</code> (the same
+value sent in the <code>originator</code> header, <code>codex_cli_rs</code> by default), the CLI
+version, and an <code>env</code> attribute so downstream collectors can distinguish
+dev/staging/prod traffic. Only telemetry produced inside the <code>codex_otel</code>
+crate—the events listed below—is forwarded to the exporter.</p>
+<h3 id="event-catalog">Event catalog<a class="headerlink" href="#event-catalog" title="Permanent link">&para;</a></h3>
+<p>Every event shares a common set of metadata fields: <code>event.timestamp</code>,
+<code>conversation.id</code>, <code>app.version</code>, <code>auth_mode</code> (when available),
+<code>user.account_id</code> (when available), <code>terminal.type</code>, <code>model</code>, and <code>slug</code>.</p>
+<p>With OTEL enabled Codex emits the following event types (in addition to the
+metadata above):</p>
+<ul>
+<li><code>codex.conversation_starts</code></li>
+<li><code>provider_name</code></li>
+<li><code>reasoning_effort</code> (optional)</li>
+<li><code>reasoning_summary</code></li>
+<li><code>context_window</code> (optional)</li>
+<li><code>max_output_tokens</code> (optional)</li>
+<li><code>auto_compact_token_limit</code> (optional)</li>
+<li><code>approval_policy</code></li>
+<li><code>sandbox_policy</code></li>
+<li><code>mcp_servers</code> (comma-separated list)</li>
+<li><code>active_profile</code> (optional)</li>
+<li><code>codex.api_request</code></li>
+<li><code>attempt</code></li>
+<li><code>duration_ms</code></li>
+<li><code>http.response.status_code</code> (optional)</li>
+<li><code>error.message</code> (failures)</li>
+<li><code>codex.sse_event</code></li>
+<li><code>event.kind</code></li>
+<li><code>duration_ms</code></li>
+<li><code>error.message</code> (failures)</li>
+<li><code>input_token_count</code> (responses only)</li>
+<li><code>output_token_count</code> (responses only)</li>
+<li><code>cached_token_count</code> (responses only, optional)</li>
+<li><code>reasoning_token_count</code> (responses only, optional)</li>
+<li><code>tool_token_count</code> (responses only)</li>
+<li><code>codex.user_prompt</code></li>
+<li><code>prompt_length</code></li>
+<li><code>prompt</code> (redacted unless <code>log_user_prompt = true</code>)</li>
+<li><code>codex.tool_decision</code></li>
+<li><code>tool_name</code></li>
+<li><code>call_id</code></li>
+<li><code>decision</code> (<code>approved</code>, <code>approved_for_session</code>, <code>denied</code>, or <code>abort</code>)</li>
+<li><code>source</code> (<code>config</code> or <code>user</code>)</li>
+<li><code>codex.tool_result</code></li>
+<li><code>tool_name</code></li>
+<li><code>call_id</code> (optional)</li>
+<li><code>arguments</code> (optional)</li>
+<li><code>duration_ms</code> (execution time for the tool)</li>
+<li><code>success</code> (<code>"true"</code> or <code>"false"</code>)</li>
+<li><code>output</code></li>
+</ul>
+<p>These event shapes may change as we iterate.</p>
+<h3 id="choosing-an-exporter">Choosing an exporter<a class="headerlink" href="#choosing-an-exporter" title="Permanent link">&para;</a></h3>
+<p>Set <code>otel.exporter</code> to control where events go:</p>
+<ul>
+<li><code>none</code> – leaves instrumentation active but skips exporting. This is the
+  default.</li>
+<li><code>otlp-http</code> – posts OTLP log records to an OTLP/HTTP collector. Specify the
+  endpoint, protocol, and headers your collector expects:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">[otel]</span>
+<span class="n">exporter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">otlp-http</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://otel.example.com/v1/logs&quot;</span><span class="err">,</span>
+<span class="w">  </span><span class="n">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;binary&quot;</span><span class="err">,</span>
+<span class="w">  </span><span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;x-otlp-api-key&quot;</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;${OTLP_TOKEN}&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="err">}}</span>
+</code></pre></div>
+<ul>
+<li><code>otlp-grpc</code> – streams OTLP log records over gRPC. Provide the endpoint and any
+  metadata headers:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">[otel]</span>
+<span class="n">exporter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">otlp-grpc</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://otel.example.com:4317&quot;</span><span class="err">,</span>
+<span class="w">  </span><span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;x-otlp-meta&quot;</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;abc123&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="err">}}</span>
+</code></pre></div>
+<p>If the exporter is <code>none</code> nothing is written anywhere; otherwise you must run or point to your
+own collector. All exporters run on a background batch worker that is flushed on
+shutdown.</p>
+<p>If you build Codex from source the OTEL crate is still behind an <code>otel</code> feature
+flag; the official prebuilt binaries ship with the feature enabled. When the
+feature is disabled the telemetry hooks become no-ops so the CLI continues to
+function without the extra dependencies.</p>
+<h2 id="notify">notify<a class="headerlink" href="#notify" title="Permanent link">&para;</a></h2>
+<p>Specify a program that will be executed to get notified about events generated by Codex. Note that the program will receive the notification argument as a string of JSON, e.g.:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;agent-turn-complete&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;turn-id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12345&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;input-messages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Rename `foo` to `bar` and update the callsites.&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;last-assistant-message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Rename complete and verified `cargo build` succeeds.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>"type"</code> property will always be set. Currently, <code>"agent-turn-complete"</code> is the only notification type that is supported.</p>
+<p>As an example, here is a Python script that parses the JSON and decides whether to show a desktop push notification using <a href="https://github.com/julienXX/terminal-notifier">terminal-notifier</a> on macOS:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Usage: notify.py &lt;NOTIFICATION_JSON&gt;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">notification</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">match</span> <span class="n">notification_type</span> <span class="o">:=</span> <span class="n">notification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">):</span>
+        <span class="k">case</span> <span class="s2">&quot;agent-turn-complete&quot;</span><span class="p">:</span>
+            <span class="n">assistant_message</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;last-assistant-message&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">assistant_message</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Codex: </span><span class="si">{</span><span class="n">assistant_message</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Codex: Turn Complete!&quot;</span>
+            <span class="n">input_messages</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input_messages&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_messages</span><span class="p">)</span>
+            <span class="n">title</span> <span class="o">+=</span> <span class="n">message</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;not sending a push notification for: </span><span class="si">{</span><span class="n">notification_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;terminal-notifier&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-title&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;-message&quot;</span><span class="p">,</span>
+            <span class="n">message</span><span class="p">,</span>
+            <span class="s2">&quot;-group&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;codex&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-ignoreDnD&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-activate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;com.googlecode.iterm2&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<p>To have Codex use this script for notifications, you would configure it via <code>notify</code> in <code>~/.code/config.toml</code> (legacy <code>~/.codex/config.toml</code> is still read) using the appropriate path to <code>notify.py</code> on your computer:</p>
+<div class="highlight"><pre><span></span><code><span class="n">notify</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/Users/mbolin/.codex/notify.py&quot;</span><span class="p">]</span>
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+Use <code>notify</code> for automation and integrations: Codex invokes your external program with a single JSON argument for each event, independent of the TUI. If you only want lightweight desktop notifications while using the TUI, prefer <code>tui.notifications</code>, which uses terminal escape codes and requires no external program. You can enable both; <code>tui.notifications</code> covers in‑TUI alerts (e.g., approval prompts), while <code>notify</code> is best for system‑level hooks or custom notifiers. Currently, <code>notify</code> emits only <code>agent-turn-complete</code>, whereas <code>tui.notifications</code> supports <code>agent-turn-complete</code> and <code>approval-requested</code> with optional filtering.</p>
+</blockquote>
+<h2 id="history">history<a class="headerlink" href="#history" title="Permanent link">&para;</a></h2>
+<p>By default, Codex CLI records messages sent to the model in <code>$CODEX_HOME/history.jsonl</code>. Note that on UNIX, the file permissions are set to <code>o600</code>, so it should only be readable and writable by the owner.</p>
+<p>To disable this behavior, configure <code>[history]</code> as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[history]</span>
+<span class="n">persistence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;none&quot;</span><span class="w">  </span><span class="c1"># &quot;save-all&quot; is the default value</span>
+</code></pre></div>
+<h2 id="file_opener">file_opener<a class="headerlink" href="#file_opener" title="Permanent link">&para;</a></h2>
+<p>Identifies the editor/URI scheme to use for hyperlinking citations in model output. If set, citations to files in the model output will be hyperlinked using the specified URI scheme so they can be ctrl/cmd-clicked from the terminal to open them.</p>
+<p>For example, if the model output includes a reference such as <code>【F:/home/user/project/main.py†L42-L50】</code>, then this would be rewritten to link to the URI <code>vscode://file/home/user/project/main.py:42</code>.</p>
+<p>Note this is <strong>not</strong> a general editor setting (like <code>$EDITOR</code>), as it only accepts a fixed set of values:</p>
+<ul>
+<li><code>"vscode"</code> (default)</li>
+<li><code>"vscode-insiders"</code></li>
+<li><code>"windsurf"</code></li>
+<li><code>"cursor"</code></li>
+<li><code>"none"</code> to explicitly disable this feature</li>
+</ul>
+<p>Currently, <code>"vscode"</code> is the default, though Codex does not verify VS Code is installed. As such, <code>file_opener</code> may default to <code>"none"</code> or something else in the future.</p>
+<h2 id="hide_agent_reasoning">hide_agent_reasoning<a class="headerlink" href="#hide_agent_reasoning" title="Permanent link">&para;</a></h2>
+<p>Codex intermittently emits "reasoning" events that show the model's internal "thinking" before it produces a final answer. Some users may find these events distracting, especially in CI logs or minimal terminal output.</p>
+<p>Setting <code>hide_agent_reasoning</code> to <code>true</code> suppresses these events in <strong>both</strong> the TUI as well as the headless <code>exec</code> sub-command:</p>
+<div class="highlight"><pre><span></span><code><span class="n">hide_agent_reasoning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">   </span><span class="c1"># defaults to false</span>
+</code></pre></div>
+<h2 id="show_raw_agent_reasoning">show_raw_agent_reasoning<a class="headerlink" href="#show_raw_agent_reasoning" title="Permanent link">&para;</a></h2>
+<p>Surfaces the model’s raw chain-of-thought ("raw reasoning content") when available.</p>
+<p>Notes:</p>
+<ul>
+<li>Only takes effect if the selected model/provider actually emits raw reasoning content. Many models do not. When unsupported, this option has no visible effect.</li>
+<li>Raw reasoning may include intermediate thoughts or sensitive context. Enable only if acceptable for your workflow.</li>
+</ul>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="n">show_raw_agent_reasoning</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c1"># defaults to false</span>
+</code></pre></div>
+<h2 id="model_context_window">model_context_window<a class="headerlink" href="#model_context_window" title="Permanent link">&para;</a></h2>
+<p>The size of the context window for the model, in tokens.</p>
+<p>In general, Codex knows the context window for the most common OpenAI models, but if you are using a new model with an old version of the Codex CLI, then you can use <code>model_context_window</code> to tell Codex what value to use to determine how much context is left during a conversation.</p>
+<h2 id="model_max_output_tokens">model_max_output_tokens<a class="headerlink" href="#model_max_output_tokens" title="Permanent link">&para;</a></h2>
+<p>This is analogous to <code>model_context_window</code>, but for the maximum number of output tokens for the model.</p>
+<h2 id="project_doc_max_bytes">project_doc_max_bytes<a class="headerlink" href="#project_doc_max_bytes" title="Permanent link">&para;</a></h2>
+<p>Maximum number of bytes to read from an <code>AGENTS.md</code> file to include in the instructions sent with the first turn of a session. Defaults to 32 KiB.</p>
+<h2 id="project_doc_fallback_filenames">project_doc_fallback_filenames<a class="headerlink" href="#project_doc_fallback_filenames" title="Permanent link">&para;</a></h2>
+<p>Ordered list of additional filenames to look for when <code>AGENTS.md</code> is missing at a given directory level. The CLI always checks <code>AGENTS.md</code> first; the configured fallbacks are tried in the order provided. This lets monorepos that already use alternate instruction files (for example, <code>CLAUDE.md</code>) work out of the box while you migrate to <code>AGENTS.md</code> over time.</p>
+<div class="highlight"><pre><span></span><code><span class="n">project_doc_fallback_filenames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CLAUDE.md&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;.exampleagentrules.md&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>We recommend migrating instructions to AGENTS.md; other filenames may reduce model performance.</p>
+<h2 id="tui">tui<a class="headerlink" href="#tui" title="Permanent link">&para;</a></h2>
+<p>Options that are specific to the TUI.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[tui]</span>
+<span class="c1"># Send desktop notifications when approvals are required or a turn completes.</span>
+<span class="c1"># Defaults to false.</span>
+<span class="n">notifications</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="c1"># You can optionally filter to specific notification types.</span>
+<span class="c1"># Available types are &quot;agent-turn-complete&quot; and &quot;approval-requested&quot;.</span>
+<span class="n">notifications</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;agent-turn-complete&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;approval-requested&quot;</span><span class="w"> </span><span class="p">]</span>
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+Codex emits desktop notifications using terminal escape codes. Not all terminals support these (notably, macOS Terminal.app and VS Code's terminal do not support custom notifications. iTerm2, Ghostty and WezTerm do support these notifications).</p>
+<p>[!NOTE]
+<code>tui.notifications</code> is built‑in and limited to the TUI session. For programmatic or cross‑environment notifications—or to integrate with OS‑specific notifiers—use the top-level <code>notify</code> option to run an external program that receives event JSON. The two settings are independent and can be used together.</p>
+</blockquote>
+<h3 id="auto-drive-observer">Auto Drive Observer<a class="headerlink" href="#auto-drive-observer" title="Permanent link">&para;</a></h3>
+<p>Codex keeps long-running Auto Drive sessions in check with a lightweight observer thread. Configure its cadence with the top-level <code>auto_drive_observer_cadence</code> key (default <code>5</code>). After every <em>n</em> completed requests the observer reviews the coordinator/CLI transcript, emits telemetry, and—if necessary—suggests a corrected prompt or follow-up guidance. Setting the value to <code>0</code> disables the observer entirely.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run the observer after every third Auto Drive request</span>
+<span class="n">auto_drive_observer_cadence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+</code></pre></div>
+<p>When the observer reports <code>status = "failing"</code>, the TUI banner highlights the intervention, updates the pending prompt when provided, and records guidance for future coordinator turns.</p>
+<h2 id="project-hooks">Project Hooks<a class="headerlink" href="#project-hooks" title="Permanent link">&para;</a></h2>
+<p>Use the <code>[projects]</code> table to scope settings to a specific workspace path. In addition to <code>trust_level</code>, <code>approval_policy</code>, and <code>always_allow_commands</code>, you can attach lifecycle hooks that run commands automatically when notable events occur.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[projects.</span><span class="s2">&quot;/Users/me/src/my-app&quot;</span><span class="k">]</span>
+<span class="n">trust_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;trusted&quot;</span>
+
+<span class="k">[[projects.</span><span class="s2">&quot;/Users/me/src/my-app&quot;</span><span class="k">.hooks]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;bootstrap&quot;</span>
+<span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;session.start&quot;</span>
+<span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;./scripts/bootstrap.sh&quot;</span><span class="p">]</span>
+<span class="n">timeout_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60000</span>
+
+<span class="k">[[projects.</span><span class="s2">&quot;/Users/me/src/my-app&quot;</span><span class="k">.hooks]]</span>
+<span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tool.after&quot;</span>
+<span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;npm run lint -- --changed&quot;</span>
+</code></pre></div>
+<p>Supported hook events:</p>
+<ul>
+<li><code>session.start</code>: after the session is configured (once per launch)</li>
+<li><code>session.end</code>: before shutdown completes</li>
+<li><code>tool.before</code>: immediately before each exec/tool command runs</li>
+<li><code>tool.after</code>: once an exec/tool command finishes (regardless of exit code)</li>
+<li><code>file.before_write</code>: right before an <code>apply_patch</code> is applied</li>
+<li><code>file.after_write</code>: after an <code>apply_patch</code> completes and diffs are emitted</li>
+</ul>
+<p>Hook commands run inside the same sandbox mode as the session and appear in the TUI as their own exec cells. Failures are surfaced as background events but do not block the main task. Each invocation receives environment variables such as <code>CODE_HOOK_EVENT</code>, <code>CODE_HOOK_NAME</code>, <code>CODE_HOOK_INDEX</code>, <code>CODE_HOOK_CALL_ID</code>, <code>CODE_HOOK_PAYLOAD</code> (JSON describing the context), <code>CODE_SESSION_CWD</code>, and—when applicable—<code>CODE_HOOK_SOURCE_CALL_ID</code>. Hooks may also set <code>cwd</code>, provide additional <code>env</code> entries, and specify <code>timeout_ms</code>.</p>
+<p>Example <code>tool.after</code> payload:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tool.after&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;call_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tool_12&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cwd&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/Users/me/src/my-app&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;npm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;test&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;exit_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;duration_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1832</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;stdout&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;…output truncated…&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;stderr&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;…&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;timed_out&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="project-commands">Project Commands<a class="headerlink" href="#project-commands" title="Permanent link">&para;</a></h2>
+<p>Define project-scoped commands under <code>[[projects."&lt;path&gt;".commands]]</code>. Each command needs a unique <code>name</code> and either an array (<code>command</code>) or string (<code>run</code>) describing how to invoke it. Optional fields include <code>description</code>, <code>cwd</code>, <code>env</code>, and <code>timeout_ms</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[[projects.</span><span class="s2">&quot;/Users/me/src/my-app&quot;</span><span class="k">.commands]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;setup&quot;</span>
+<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Install dependencies&quot;</span>
+<span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pnpm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;install&quot;</span><span class="p">]</span>
+
+<span class="k">[[projects.</span><span class="s2">&quot;/Users/me/src/my-app&quot;</span><span class="k">.commands]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;unit&quot;</span>
+<span class="n">run</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;cargo test --lib&quot;</span>
+</code></pre></div>
+<p>Project commands appear in the TUI via <code>/cmd &lt;name&gt;</code> and run through the standard execution pipeline. During execution Codex sets <code>CODE_PROJECT_COMMAND_NAME</code>, <code>CODE_PROJECT_COMMAND_DESCRIPTION</code> (when provided), and <code>CODE_SESSION_CWD</code> so scripts can tailor their behaviour.</p>
+<h2 id="config-reference">Config reference<a class="headerlink" href="#config-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type / Values</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>string</td>
+<td>Model to use (e.g., <code>gpt-5-codex</code>).</td>
+</tr>
+<tr>
+<td><code>model_provider</code></td>
+<td>string</td>
+<td>Provider id from <code>model_providers</code> (default: <code>openai</code>).</td>
+</tr>
+<tr>
+<td><code>model_context_window</code></td>
+<td>number</td>
+<td>Context window tokens.</td>
+</tr>
+<tr>
+<td><code>model_max_output_tokens</code></td>
+<td>number</td>
+<td>Max output tokens.</td>
+</tr>
+<tr>
+<td><code>approval_policy</code></td>
+<td><code>untrusted</code> | <code>on-failure</code> | <code>on-request</code> | <code>never</code></td>
+<td>When to prompt for approval.</td>
+</tr>
+<tr>
+<td><code>sandbox_mode</code></td>
+<td><code>read-only</code> | <code>workspace-write</code> | <code>danger-full-access</code></td>
+<td>OS sandbox policy.</td>
+</tr>
+<tr>
+<td><code>sandbox_workspace_write.writable_roots</code></td>
+<td>array<string></td>
+<td>Extra writable roots in workspace‑write.</td>
+</tr>
+<tr>
+<td><code>sandbox_workspace_write.network_access</code></td>
+<td>boolean</td>
+<td>Allow network in workspace‑write (default: false).</td>
+</tr>
+<tr>
+<td><code>sandbox_workspace_write.exclude_tmpdir_env_var</code></td>
+<td>boolean</td>
+<td>Exclude <code>$TMPDIR</code> from writable roots (default: false).</td>
+</tr>
+<tr>
+<td><code>sandbox_workspace_write.exclude_slash_tmp</code></td>
+<td>boolean</td>
+<td>Exclude <code>/tmp</code> from writable roots (default: false).</td>
+</tr>
+<tr>
+<td><code>disable_response_storage</code></td>
+<td>boolean</td>
+<td>Required for ZDR orgs.</td>
+</tr>
+<tr>
+<td><code>notify</code></td>
+<td>array<string></td>
+<td>External program for notifications.</td>
+</tr>
+<tr>
+<td><code>instructions</code></td>
+<td>string</td>
+<td>Currently ignored; use <code>experimental_instructions_file</code> or <code>AGENTS.md</code>.</td>
+</tr>
+<tr>
+<td><code>mcp_servers.&lt;id&gt;.command</code></td>
+<td>string</td>
+<td>MCP server launcher command.</td>
+</tr>
+<tr>
+<td><code>mcp_servers.&lt;id&gt;.args</code></td>
+<td>array<string></td>
+<td>MCP server args.</td>
+</tr>
+<tr>
+<td><code>mcp_servers.&lt;id&gt;.env</code></td>
+<td>map<string,string></td>
+<td>MCP server env vars.</td>
+</tr>
+<tr>
+<td><code>mcp_servers.&lt;id&gt;.startup_timeout_sec</code></td>
+<td>number</td>
+<td>Startup timeout in seconds (default: 10). Timeout is applied both for initializing MCP server and initially listing tools.</td>
+</tr>
+<tr>
+<td><code>mcp_servers.&lt;id&gt;.tool_timeout_sec</code></td>
+<td>number</td>
+<td>Per-tool timeout in seconds (default: 60). Accepts fractional values; omit to use the default.</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.name</code></td>
+<td>string</td>
+<td>Display name.</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.base_url</code></td>
+<td>string</td>
+<td>API base URL.</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.env_key</code></td>
+<td>string</td>
+<td>Env var for API key.</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.wire_api</code></td>
+<td><code>chat</code> | <code>responses</code></td>
+<td>Protocol used (default: <code>chat</code>).</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.query_params</code></td>
+<td>map<string,string></td>
+<td>Extra query params (e.g., Azure <code>api-version</code>).</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.http_headers</code></td>
+<td>map<string,string></td>
+<td>Additional static headers.</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.env_http_headers</code></td>
+<td>map<string,string></td>
+<td>Headers sourced from env vars.</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.request_max_retries</code></td>
+<td>number</td>
+<td>Per‑provider HTTP retry count (default: 4).</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.stream_max_retries</code></td>
+<td>number</td>
+<td>SSE stream retry count (default: 5).</td>
+</tr>
+<tr>
+<td><code>model_providers.&lt;id&gt;.stream_idle_timeout_ms</code></td>
+<td>number</td>
+<td>SSE idle timeout (ms) (default: 300000).</td>
+</tr>
+<tr>
+<td><code>project_doc_max_bytes</code></td>
+<td>number</td>
+<td>Max bytes to read from <code>AGENTS.md</code>.</td>
+</tr>
+<tr>
+<td><code>projects.&lt;path&gt;.trust_level</code></td>
+<td>string</td>
+<td>Mark project/worktree as trusted (only <code>"trusted"</code> is recognized).</td>
+</tr>
+<tr>
+<td><code>projects.&lt;path&gt;.hooks</code></td>
+<td>array<table></td>
+<td>Lifecycle hooks for that workspace (see "Project Hooks").</td>
+</tr>
+<tr>
+<td><code>projects.&lt;path&gt;.commands</code></td>
+<td>array<table></td>
+<td>Project commands exposed via <code>/cmd</code>.</td>
+</tr>
+<tr>
+<td><code>profile</code></td>
+<td>string</td>
+<td>Active profile name.</td>
+</tr>
+<tr>
+<td><code>profiles.&lt;name&gt;.*</code></td>
+<td>various</td>
+<td>Profile‑scoped overrides of the same keys.</td>
+</tr>
+<tr>
+<td><code>history.persistence</code></td>
+<td><code>save-all</code> | <code>none</code></td>
+<td>History file persistence (default: <code>save-all</code>).</td>
+</tr>
+<tr>
+<td><code>history.max_bytes</code></td>
+<td>number</td>
+<td>Currently ignored (not enforced).</td>
+</tr>
+<tr>
+<td><code>file_opener</code></td>
+<td><code>vscode</code> | <code>vscode-insiders</code> | <code>windsurf</code> | <code>cursor</code> | <code>none</code></td>
+<td>URI scheme for clickable citations (default: <code>vscode</code>).</td>
+</tr>
+<tr>
+<td><code>tui</code></td>
+<td>table</td>
+<td>TUI‑specific options.</td>
+</tr>
+<tr>
+<td><code>tui.notifications</code></td>
+<td>boolean | array<string></td>
+<td>Enable desktop notifications in the tui (default: false).</td>
+</tr>
+<tr>
+<td><code>hide_agent_reasoning</code></td>
+<td>boolean</td>
+<td>Hide model reasoning events.</td>
+</tr>
+<tr>
+<td><code>show_raw_agent_reasoning</code></td>
+<td>boolean</td>
+<td>Show raw reasoning (when available).</td>
+</tr>
+<tr>
+<td><code>model_reasoning_effort</code></td>
+<td><code>minimal</code> | <code>low</code> | <code>medium</code> | <code>high</code></td>
+<td>Responses API reasoning effort.</td>
+</tr>
+<tr>
+<td><code>model_reasoning_summary</code></td>
+<td><code>auto</code> | <code>concise</code> | <code>detailed</code> | <code>none</code></td>
+<td>Reasoning summaries.</td>
+</tr>
+<tr>
+<td><code>model_verbosity</code></td>
+<td><code>low</code> | <code>medium</code> | <code>high</code></td>
+<td>GPT‑5 text verbosity (Responses API).</td>
+</tr>
+<tr>
+<td><code>model_supports_reasoning_summaries</code></td>
+<td>boolean</td>
+<td>Force‑enable reasoning summaries.</td>
+</tr>
+<tr>
+<td><code>chatgpt_base_url</code></td>
+<td>string</td>
+<td>Base URL for ChatGPT auth flow.</td>
+</tr>
+<tr>
+<td><code>experimental_resume</code></td>
+<td>string (path)</td>
+<td>Resume JSONL path (internal/experimental).</td>
+</tr>
+<tr>
+<td><code>experimental_instructions_file</code></td>
+<td>string (path)</td>
+<td>Replace built‑in instructions (experimental).</td>
+</tr>
+<tr>
+<td><code>experimental_use_exec_command_tool</code></td>
+<td>boolean</td>
+<td>Use experimental exec command tool.</td>
+</tr>
+<tr>
+<td><code>use_experimental_reasoning_summary</code></td>
+<td>boolean</td>
+<td>Use experimental summary for reasoning chain.</td>
+</tr>
+<tr>
+<td><code>responses_originator_header_internal_override</code></td>
+<td>string</td>
+<td>Override <code>originator</code> header value.</td>
+</tr>
+<tr>
+<td><code>tools.web_search</code></td>
+<td>boolean</td>
+<td>Enable web search tool (alias: <code>web_search_request</code>) (default: false).</td>
+</tr>
+<tr>
+<td><code>tools.web_search_allowed_domains</code></td>
+<td>array<string></td>
+<td>Optional allow-list for web search (filters.allowed_domains).</td>
+</tr>
+</tbody>
+</table>
+<!-- markdownlint-enable MD012 MD013 MD028 MD033 -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      
+        <script src="../js/mermaid-init.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

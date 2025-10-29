@@ -1,0 +1,4523 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A fast, local coding agent for your terminal">
+      
+      
+      
+        <link rel="canonical" href="https://georgepearse.github.io/kode/features/auto-drive/architecture/">
+      
+      
+        <link rel="prev" href="../../../upstream-mcp-reuse-strategy/">
+      
+      
+        <link rel="next" href="../../../auto-drive-state-inventory/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>Architecture - kode</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#auto-drive-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="kode" class="md-header__button md-logo" aria-label="kode" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            kode
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/GeorgePearse/kode" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kode
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../install/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../slash-commands/" class="md-tabs__link">
+          
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../advanced/" class="md-tabs__link">
+          
+  
+  Advanced
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../fork-enhancements/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../history_render_cache_bridge/" class="md-tabs__link">
+          
+  
+  Technical Deep Dives
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../release_management/" class="md-tabs__link">
+          
+  
+  Maintenance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../references/" class="md-tabs__link">
+          
+  
+  References
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../contributing/" class="md-tabs__link">
+          
+  
+  Contribution
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../license/" class="md-tabs__link">
+          
+  
+  Legal
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="kode" class="md-nav__button md-logo" aria-label="kode" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    kode
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/GeorgePearse/kode" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kode
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started Details
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started Details
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/quick-start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../slash-commands/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../THEME_CONFIG/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Theme Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/basic/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Basic Usage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../advanced/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Advanced Topics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sandbox/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sandbox Mode
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../exec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../upstream-mcp-implementation-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../upstream-mcp-reuse-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Reuse Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Features
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Features
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Auto Drive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Auto Drive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-Level Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-controller-controllerrs-32kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Controller (controller.rs - 32KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Controller (controller.rs - 32KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#autorunphase-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      AutoRunPhase State Machine
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continue-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continue Modes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restart-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restart Logic
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-auto-coordinator-auto_coordinatorrs-87kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Auto Coordinator (auto_coordinator.rs - 87KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Auto Coordinator (auto_coordinator.rs - 87KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claude-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Claude Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events-emitted" class="md-nav__link">
+    <span class="md-ellipsis">
+      Events Emitted
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-auto-drive-history-auto_drive_historyrs-17kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Auto-Drive History (auto_drive_history.rs - 17KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Auto-Drive History (auto_drive_history.rs - 17KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Structure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-auto-compact-auto_compactrs-17kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Auto Compact (auto_compact.rs - 17KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Auto Compact (auto_compact.rs - 17KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compaction-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compaction Strategy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-budgeting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Budgeting
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-coordinator-router-coordinator_routerrs-4kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Coordinator Router (coordinator_router.rs - 4KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Coordinator Router (coordinator_router.rs - 4KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#routing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Routing Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-retry-manager-retryrs-5kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Retry Manager (retry.rs - 5KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Retry Manager (retry.rs - 5KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backoff-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backoff Strategy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-session-metrics-session_metricsrs-3kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Session Metrics (session_metrics.rs - 3KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Session Metrics (session_metrics.rs - 3KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tracked-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tracked Metrics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      TUI Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TUI Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#goal-entry-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goal Entry Panel
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coordinator-view-bottom-pane" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coordinator View (Bottom Pane)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#history-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      History Cells
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-drive-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto-Drive Cards
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-qa-orchestration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto QA Orchestration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Auto QA Orchestration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#observer-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Observer Lifecycle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrap-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bootstrap Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadence-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cadence Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-check-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-Check Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transient-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transient Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-recoverable-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      User-Recoverable Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminal-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminal Errors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#token-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Token Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Tracking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compaction-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compaction Triggers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-window-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Context Window Strategy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-and-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development and Testing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development and Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fault-injection-faultsrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fault Injection (faults.rs)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Testing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Latency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Efficiency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Enhancements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Enhancements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Improvements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pubsub-systems-for-multi-agent-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pub/Sub Systems for Multi-Agent Communication
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internal-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Internal Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#further-reading-on-concurrent-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading on Concurrent Patterns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../auto-drive-state-inventory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Inventory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../auto-drive-phase-migration-TODO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase Migration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prompts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integration-zed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration - Zed
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../auto-qa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auto QA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../fork-enhancements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fork Enhancements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/pipeline/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pipeline
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Aggregation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Aggregation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../aggregation/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../aggregation/moa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MOA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../aggregation/mcts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCTS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../aggregation/rsa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RSA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Technical Deep Dives
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Technical Deep Dives
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    History & Caching
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            History & Caching
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../history_render_cache_bridge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History Render Cache Bridge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../history_state_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History State Schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/history-debugging/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History Debugging
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dev/history-invariants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    History Invariants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    TUI & UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            TUI & UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tui-card-themes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Card Themes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tui-chatwidget-refactor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat Widget Refactor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Upstream
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            Upstream
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../upstream-acp-merge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ACP Merge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../upstream-mcp-implementation-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Performance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_4">
+            <span class="md-nav__icon md-icon"></span>
+            Performance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../performance/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Benchmarks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_5">
+            <span class="md-nav__icon md-icon"></span>
+            Configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configuration/config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Config Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_6" id="__nav_7_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_6">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api/types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Maintenance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Maintenance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release_management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maintenance/prompt-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompt Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maintenance/upstream-diff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Upstream Diff
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    References
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            References
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../references/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    References
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../platform-sandboxing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Sandboxing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../markdown_showcase/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markdown Showcase
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../open-source-fund/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open Source Fund
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../zdr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ZDR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../experimental/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Experimental
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../HOMEBREW/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Homebrew
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../interrupt-resume-postmortem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interrupt & Resume
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contribution
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Contribution
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CLA/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Legal
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Legal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../license/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      System Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-Level Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-controller-controllerrs-32kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Controller (controller.rs - 32KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Controller (controller.rs - 32KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#autorunphase-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      AutoRunPhase State Machine
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continue-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continue Modes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restart-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restart Logic
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-auto-coordinator-auto_coordinatorrs-87kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Auto Coordinator (auto_coordinator.rs - 87KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Auto Coordinator (auto_coordinator.rs - 87KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claude-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Claude Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events-emitted" class="md-nav__link">
+    <span class="md-ellipsis">
+      Events Emitted
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-auto-drive-history-auto_drive_historyrs-17kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Auto-Drive History (auto_drive_history.rs - 17KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Auto-Drive History (auto_drive_history.rs - 17KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Structure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-auto-compact-auto_compactrs-17kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Auto Compact (auto_compact.rs - 17KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Auto Compact (auto_compact.rs - 17KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compaction-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compaction Strategy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-budgeting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Budgeting
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-coordinator-router-coordinator_routerrs-4kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Coordinator Router (coordinator_router.rs - 4KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Coordinator Router (coordinator_router.rs - 4KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#routing-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Routing Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-retry-manager-retryrs-5kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Retry Manager (retry.rs - 5KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Retry Manager (retry.rs - 5KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backoff-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backoff Strategy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-session-metrics-session_metricsrs-3kb" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Session Metrics (session_metrics.rs - 3KB)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Session Metrics (session_metrics.rs - 3KB)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tracked-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tracked Metrics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tui-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      TUI Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TUI Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#goal-entry-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goal Entry Panel
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coordinator-view-bottom-pane" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coordinator View (Bottom Pane)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#history-cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      History Cells
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-drive-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto-Drive Cards
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-qa-orchestration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto QA Orchestration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Auto QA Orchestration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#observer-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Observer Lifecycle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrap-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bootstrap Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cadence-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cadence Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-check-phase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-Check Phase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transient-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transient Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-recoverable-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      User-Recoverable Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminal-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminal Errors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#token-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Token Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Tracking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compaction-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compaction Triggers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-window-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Context Window Strategy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-and-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development and Testing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development and Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fault-injection-faultsrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fault Injection (faults.rs)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Testing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Latency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Efficiency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Future Enhancements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Enhancements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Improvements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pubsub-systems-for-multi-agent-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pub/Sub Systems for Multi-Agent Communication
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#internal-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Internal Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#further-reading-on-concurrent-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading on Concurrent Patterns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="auto-drive-architecture">Auto-Drive Architecture<a class="headerlink" href="#auto-drive-architecture" title="Permanent link">&para;</a></h1>
+<p>Auto-Drive is the autonomous task orchestration system at the heart of kode. It coordinates multi-step workflows, manages AI agent interactions, handles intelligent error recovery, and automates decision-making. This document provides a comprehensive technical overview of how Auto-Drive is architected and implemented.</p>
+<h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
+<p>Auto-Drive enables users to specify complex goals and let the system autonomously execute them through iterative planning, execution, and refinement cycles. The system consists of several interconnected components that work together to:</p>
+<ol>
+<li><strong>Understand user intent</strong> through natural language goal descriptions</li>
+<li><strong>Plan next steps</strong> using the Claude AI coordinator</li>
+<li><strong>Execute tasks</strong> by generating and running CLI actions</li>
+<li><strong>Manage state</strong> across multiple turns with conversation history</li>
+<li><strong>Handle failures</strong> gracefully with intelligent retry logic</li>
+<li><strong>Optimize context</strong> by compacting conversation history to fit token limits</li>
+<li><strong>Validate progress</strong> through automated quality assurance</li>
+</ol>
+<h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TB
+    subgraph UI["TUI Layer"]
+        GoalPanel["Goal Entry Panel"]
+        CoordView["Coordinator View"]
+        HistoryCell["History Cell"]
+        CardUI["Auto-Drive Cards"]
+    end
+
+    subgraph Core["Auto-Drive Core"]
+        Controller["Controller&lt;br/&gt;State Machine"]
+        Coordinator["Auto Coordinator&lt;br/&gt;Planning Engine"]
+        History["Auto-Drive History&lt;br/&gt;Conversation Management"]
+        Compact["Auto Compact&lt;br/&gt;Context Optimization"]
+        Router["Coordinator Router&lt;br/&gt;Message Routing"]
+        Retry["Retry Manager&lt;br/&gt;Resilience"]
+    end
+
+    subgraph Support["Support Systems"]
+        Metrics["Session Metrics&lt;br/&gt;Telemetry"]
+        Faults["Fault Injection&lt;br/&gt;Dev/Testing"]
+        QA["Auto QA&lt;br/&gt;Quality Assurance"]
+    end
+
+    subgraph Execution["Execution Layer"]
+        CLIGen["CLI Action Generator"]
+        AgentExec["Agent Executor"]
+    end
+
+    GoalPanel --&gt;|User Input| Controller
+    CoordView --&gt;|Display Status| Controller
+    HistoryCell --&gt;|Update State| Controller
+    CardUI --&gt;|Render Cards| Controller
+
+    Controller --&gt;|Manage Phases| Coordinator
+    Controller --&gt;|Query State| History
+
+    Coordinator --&gt;|Read/Write| History
+    Coordinator --&gt;|Plan Next Steps| Router
+    Coordinator --&gt;|Generate Actions| CLIGen
+    Coordinator --&gt;|Estimate Tokens| Metrics
+
+    History --&gt;|Compact When Needed| Compact
+    History --&gt;|Update| Metrics
+
+    Router --&gt;|Route Messages| Coordinator
+
+    CLIGen --&gt;|Execute| AgentExec
+    AgentExec --&gt;|On Error| Retry
+    Retry --&gt;|Backoff Loop| Coordinator
+
+    Coordinator --&gt;|Monitor Quality| QA
+    QA --&gt;|Feedback| Controller</code></pre>
+<h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
+<h3 id="1-controller-controllerrs-32kb">1. Controller (<code>controller.rs</code> - 32KB)<a class="headerlink" href="#1-controller-controllerrs-32kb" title="Permanent link">&para;</a></h3>
+<p>The Controller is the state machine that manages the Auto-Drive lifecycle. It orchestrates transitions between different execution phases and coordinates communications between the TUI and the coordinator.</p>
+<h4 id="autorunphase-state-machine">AutoRunPhase State Machine<a class="headerlink" href="#autorunphase-state-machine" title="Permanent link">&para;</a></h4>
+<p>Auto-Drive executes through a well-defined state machine with 9 distinct phases:</p>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; Idle
+
+    Idle --&gt; AwaitingGoalEntry: User Opens Auto-Drive
+
+    AwaitingGoalEntry --&gt; AwaitingGoalEntry: Editing Goal
+    AwaitingGoalEntry --&gt; Launching: Goal Submitted
+
+    Launching --&gt; Active: Ready to Execute
+
+    Active --&gt; AwaitingCoordinator: Submit Plan
+    Active --&gt; PausedManual: User Pauses
+
+    AwaitingCoordinator --&gt; AwaitingDiagnostics: Approved
+    AwaitingCoordinator --&gt; PausedManual: Reject/Edit
+
+    AwaitingDiagnostics --&gt; AwaitingReview: Model Response Ready
+
+    AwaitingReview --&gt; Active: Continue Immediately
+    AwaitingReview --&gt; Active: Continue in 10s
+    AwaitingReview --&gt; Active: Continue in 60s
+    AwaitingReview --&gt; PausedManual: Continue Manually
+
+    PausedManual --&gt; Active: Resume
+    PausedManual --&gt; AwaitingCoordinator: Submit Plan
+
+    Active --&gt; TransientRecovery: Transient Error
+    TransientRecovery --&gt; Active: Backoff+Retry
+    TransientRecovery --&gt; PausedManual: Max Retries
+
+    Active --&gt; Idle: Complete Successfully
+    Active --&gt; Idle: User Stops
+    TransientRecovery --&gt; Idle: User Stops</code></pre>
+<p><strong>Phase Descriptions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Purpose</th>
+<th>User Actions</th>
+<th>Next Phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Idle</strong></td>
+<td>No active run</td>
+<td>Open goal panel</td>
+<td>AwaitingGoalEntry</td>
+</tr>
+<tr>
+<td><strong>AwaitingGoalEntry</strong></td>
+<td>Goal input panel visible</td>
+<td>Edit/submit goal</td>
+<td>Launching</td>
+</tr>
+<tr>
+<td><strong>Launching</strong></td>
+<td>Preparing first turn</td>
+<td>(automatic)</td>
+<td>Active</td>
+</tr>
+<tr>
+<td><strong>Active</strong></td>
+<td>Normal execution</td>
+<td>Submit plan, pause, stop</td>
+<td>AwaitingCoordinator, PausedManual</td>
+</tr>
+<tr>
+<td><strong>AwaitingCoordinator</strong></td>
+<td>Waiting for user approval</td>
+<td>Approve, reject, edit</td>
+<td>AwaitingDiagnostics, PausedManual</td>
+</tr>
+<tr>
+<td><strong>AwaitingDiagnostics</strong></td>
+<td>Model generating response</td>
+<td>(automatic)</td>
+<td>AwaitingReview</td>
+</tr>
+<tr>
+<td><strong>AwaitingReview</strong></td>
+<td>Result ready for action</td>
+<td>Choose continue option</td>
+<td>Active, PausedManual</td>
+</tr>
+<tr>
+<td><strong>PausedManual</strong></td>
+<td>User-paused execution</td>
+<td>Resume, edit, submit</td>
+<td>Active, AwaitingCoordinator</td>
+</tr>
+<tr>
+<td><strong>TransientRecovery</strong></td>
+<td>Recovering from error</td>
+<td>(automatic backoff)</td>
+<td>Active, PausedManual</td>
+</tr>
+</tbody>
+</table>
+<h4 id="continue-modes">Continue Modes<a class="headerlink" href="#continue-modes" title="Permanent link">&para;</a></h4>
+<p>After the model generates a plan, users choose how to proceed:</p>
+<ul>
+<li><strong>Immediate</strong>: Execute the next action immediately</li>
+<li><strong>10 seconds</strong>: Wait 10 seconds then auto-execute</li>
+<li><strong>60 seconds</strong>: Wait 60 seconds then auto-execute</li>
+<li><strong>Manual</strong>: Wait for explicit user approval</li>
+</ul>
+<h4 id="restart-logic">Restart Logic<a class="headerlink" href="#restart-logic" title="Permanent link">&para;</a></h4>
+<p>When transient failures occur:</p>
+<ol>
+<li>First failure: Immediate 1-second backoff</li>
+<li>Subsequent failures: Exponential backoff (2s, 4s, 8s, 16s, 32s)</li>
+<li>Max 6 retry attempts before requiring manual intervention</li>
+<li>User can abort or retry during recovery phase</li>
+</ol>
+<h3 id="2-auto-coordinator-auto_coordinatorrs-87kb">2. Auto Coordinator (<code>auto_coordinator.rs</code> - 87KB)<a class="headerlink" href="#2-auto-coordinator-auto_coordinatorrs-87kb" title="Permanent link">&para;</a></h3>
+<p>The Coordinator is the planning engine powered by Claude AI (GPT-5). It's the "brain" of Auto-Drive, responsible for understanding goals, making decisions, and generating the next actions.</p>
+<h4 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h4>
+<pre class="mermaid"><code>sequenceDiagram
+    participant User
+    participant Controller
+    participant Coordinator
+    participant History
+    participant CLIGen
+    participant Agent
+
+    User-&gt;&gt;Controller: Submit Goal
+    Controller-&gt;&gt;Coordinator: Initialize with Goal
+    Coordinator-&gt;&gt;History: Create Turn Entry
+
+    loop Until Goal Complete or User Stops
+        Coordinator-&gt;&gt;Coordinator: Analyze Current State
+        Coordinator-&gt;&gt;Claude: "Given history, what's next?"
+        Claude--&gt;&gt;Coordinator: Plan + CLI Action
+        Coordinator-&gt;&gt;History: Log Coordinator Turn
+        Coordinator-&gt;&gt;Controller: Display Plan for Approval
+
+        Controller-&gt;&gt;User: Show Plan
+        User-&gt;&gt;Controller: Approve/Reject/Edit
+
+        alt User Approves
+            Controller-&gt;&gt;Coordinator: Proceed
+            Coordinator-&gt;&gt;CLIGen: Generate CLI Action
+            CLIGen-&gt;&gt;Agent: Execute Action
+            Agent--&gt;&gt;CLIGen: Result (stdout/stderr/status)
+            CLIGen--&gt;&gt;Coordinator: Action Result
+            Coordinator-&gt;&gt;History: Log Result
+            Coordinator-&gt;&gt;Coordinator: Decide Next Step
+        else User Rejects or Edits
+            Coordinator-&gt;&gt;Coordinator: Incorporate Feedback
+        end
+    end</code></pre>
+<h4 id="key-responsibilities">Key Responsibilities<a class="headerlink" href="#key-responsibilities" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>State Analysis</strong>: Reads conversation history and current context</li>
+<li><strong>Planning</strong>: Calls Claude to decide next steps</li>
+<li><strong>Decision Making</strong>: Routes user input and generates appropriate actions</li>
+<li><strong>Context Management</strong>: Monitors token usage and requests compaction when needed</li>
+<li><strong>Error Recovery</strong>: Implements retry logic with exponential backoff</li>
+<li><strong>Rate Limiting</strong>: Handles Claude API rate limits gracefully</li>
+<li><strong>Metrics Collection</strong>: Tracks token usage and session statistics</li>
+</ol>
+<h4 id="claude-integration">Claude Integration<a class="headerlink" href="#claude-integration" title="Permanent link">&para;</a></h4>
+<p>The Coordinator maintains an ongoing conversation with Claude that includes:</p>
+<ul>
+<li><strong>System Prompt</strong>: Describes Auto-Drive's capabilities and constraints</li>
+<li><strong>Conversation History</strong>: Complete turn-by-turn transcript</li>
+<li><strong>Current Context</strong>: Recent actions and their results</li>
+<li><strong>User Feedback</strong>: User-provided corrections or guidance</li>
+</ul>
+<p>Each turn:</p>
+<div class="highlight"><pre><span></span><code>User: Goal description or feedback
+Coordinator: Sends history to Claude
+Claude: Analyzes and returns:
+  - Thinking/reasoning
+  - Next CLI action to execute
+  - Expected outcome
+Coordinator: Logs response and displays to user
+</code></pre></div>
+<h4 id="events-emitted">Events Emitted<a class="headerlink" href="#events-emitted" title="Permanent link">&para;</a></h4>
+<p>The Coordinator publishes events for TUI consumption:</p>
+<ul>
+<li><strong>Decision</strong>: Planning output ready for approval</li>
+<li><strong>Thinking</strong>: Coordinator is analyzing (used for UI feedback)</li>
+<li><strong>UserReply</strong>: User message incorporated</li>
+<li><strong>TokenMetrics</strong>: Token usage update</li>
+<li><strong>CompactedHistory</strong>: History was compacted</li>
+</ul>
+<h3 id="3-auto-drive-history-auto_drive_historyrs-17kb">3. Auto-Drive History (<code>auto_drive_history.rs</code> - 17KB)<a class="headerlink" href="#3-auto-drive-history-auto_drive_historyrs-17kb" title="Permanent link">&para;</a></h3>
+<p>Manages the complete conversation transcript between the user, coordinator, and Claude. This is the single source of truth for the Auto-Drive session.</p>
+<h4 id="responsibilities">Responsibilities<a class="headerlink" href="#responsibilities" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Message Storage</strong>: Maintains chronological transcript</li>
+<li><strong>Deduplication</strong>: Prevents duplicate messages</li>
+<li><strong>Turn Management</strong>: Tracks multi-turn conversations</li>
+<li><strong>Metrics Aggregation</strong>: Collects session-level statistics</li>
+<li><strong>History Retrieval</strong>: Provides formatted history for coordinator</li>
+</ol>
+<h4 id="data-structure">Data Structure<a class="headerlink" href="#data-structure" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>Session
+├── Turn 1
+│   ├── User Input
+│   ├── Coordinator Response
+│   ├── Action Executed
+│   └── Result
+├── Turn 2
+│   ├── User Input
+│   ├── Coordinator Response
+│   ├── Action Executed
+│   └── Result
+└── Session Metrics
+    ├── Total Tokens
+    ├── Total Turns
+    └── Elapsed Time
+</code></pre></div>
+<h3 id="4-auto-compact-auto_compactrs-17kb">4. Auto Compact (<code>auto_compact.rs</code> - 17KB)<a class="headerlink" href="#4-auto-compact-auto_compactrs-17kb" title="Permanent link">&para;</a></h3>
+<p>Manages token context by intelligently compacting conversation history when approaching token limits. This allows Auto-Drive to handle long-running tasks without losing important context.</p>
+<h4 id="compaction-strategy">Compaction Strategy<a class="headerlink" href="#compaction-strategy" title="Permanent link">&para;</a></h4>
+<pre class="mermaid"><code>graph LR
+    A["Full History&lt;br/&gt;Recent Turns"]
+    B["Identify Checkpoints&lt;br/&gt;Logical Breakpoints"]
+    C["Create Summary&lt;br/&gt;of Earlier Turns"]
+    D["Keep Recent Turns&lt;br/&gt;Verbatim"]
+    E["Compacted History&lt;br/&gt;Summary + Recent"]
+
+    A --&gt; B
+    B --&gt; C
+    B --&gt; D
+    C --&gt; E
+    D --&gt; E</code></pre>
+<h4 id="algorithm">Algorithm<a class="headerlink" href="#algorithm" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Token Estimation</strong>: Counts tokens (4 bytes per token approximation)</li>
+<li><strong>Checkpoint Identification</strong>: Finds logical breakpoints in history</li>
+<li><strong>Summary Generation</strong>: Creates concise summary of earlier turns</li>
+<li><strong>Preservation</strong>: Keeps recent N turns in full detail</li>
+<li><strong>Validation</strong>: Ensures compacted history fits within token limit</li>
+</ol>
+<h4 id="token-budgeting">Token Budgeting<a class="headerlink" href="#token-budgeting" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Input token limit: 200,000 tokens (Claude model limit)</li>
+<li>Compaction triggers at 75% capacity</li>
+<li>Recent 10 turns always kept verbatim</li>
+<li>Summary preserves key decisions and outcomes</li>
+</ul>
+<h3 id="5-coordinator-router-coordinator_routerrs-4kb">5. Coordinator Router (<code>coordinator_router.rs</code> - 4KB)<a class="headerlink" href="#5-coordinator-router-coordinator_routerrs-4kb" title="Permanent link">&para;</a></h3>
+<p>Routes user messages to appropriate handlers based on content. Enables quick responses to common queries without calling Claude.</p>
+<h4 id="routing-rules">Routing Rules<a class="headerlink" href="#routing-rules" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Handler</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code>, <code>where am i</code></td>
+<td>Status Query</td>
+<td>Current phase and summary</td>
+</tr>
+<tr>
+<td><code>plan</code>, <code>next</code></td>
+<td>Plan Request</td>
+<td>Display current plan</td>
+</tr>
+<tr>
+<td><code>stop</code>, <code>abort</code></td>
+<td>Stop Command</td>
+<td>Graceful termination</td>
+</tr>
+<tr>
+<td><code>other</code></td>
+<td>Coordinator</td>
+<td>Full Claude reasoning</td>
+</tr>
+</tbody>
+</table>
+<p>This provides sub-100ms responses for common queries while delegating complex reasoning to Claude.</p>
+<h3 id="6-retry-manager-retryrs-5kb">6. Retry Manager (<code>retry.rs</code> - 5KB)<a class="headerlink" href="#6-retry-manager-retryrs-5kb" title="Permanent link">&para;</a></h3>
+<p>Implements resilient error handling with exponential backoff for transient failures.</p>
+<h4 id="backoff-strategy">Backoff Strategy<a class="headerlink" href="#backoff-strategy" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>Attempt 1: Fail → Wait 1s
+Attempt 2: Fail → Wait 2s
+Attempt 3: Fail → Wait 4s
+Attempt 4: Fail → Wait 8s
+Attempt 5: Fail → Wait 16s
+Attempt 6: Fail → Wait 32s
+Attempt 7: Manual intervention required
+</code></pre></div>
+<h4 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Jitter</strong>: Random variation (±10%) to prevent thundering herd</li>
+<li><strong>Cancellation</strong>: User can abort retry loop at any time</li>
+<li><strong>Status Callbacks</strong>: TUI receives updates during backoff</li>
+<li><strong>Rate Limit Handling</strong>: Special handling for 429 responses</li>
+</ul>
+<h3 id="7-session-metrics-session_metricsrs-3kb">7. Session Metrics (<code>session_metrics.rs</code> - 3KB)<a class="headerlink" href="#7-session-metrics-session_metricsrs-3kb" title="Permanent link">&para;</a></h3>
+<p>Collects telemetry about Auto-Drive sessions.</p>
+<h4 id="tracked-metrics">Tracked Metrics<a class="headerlink" href="#tracked-metrics" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Token Usage</strong>: Input, output, and total tokens per turn</li>
+<li><strong>Turn Count</strong>: Number of coordinator interactions</li>
+<li><strong>Elapsed Time</strong>: Wall-clock session duration</li>
+<li><strong>Error Count</strong>: Failures and retries</li>
+<li><strong>Completion Status</strong>: Successful completion vs. abortion</li>
+</ul>
+<h2 id="tui-integration">TUI Integration<a class="headerlink" href="#tui-integration" title="Permanent link">&para;</a></h2>
+<p>Auto-Drive integrates with the TUI through several specialized components:</p>
+<h3 id="goal-entry-panel">Goal Entry Panel<a class="headerlink" href="#goal-entry-panel" title="Permanent link">&para;</a></h3>
+<p>Located in the chat input area, allows users to:
+- Describe their goal in natural language
+- Review previously executed goals
+- Edit and re-run goals</p>
+<h3 id="coordinator-view-bottom-pane">Coordinator View (Bottom Pane)<a class="headerlink" href="#coordinator-view-bottom-pane" title="Permanent link">&para;</a></h3>
+<p>Displays:
+- <strong>Current Goal</strong>: What Auto-Drive is trying to accomplish
+- <strong>Status</strong>: Current phase and elapsed time
+- <strong>Pending Plan</strong>: Next action awaiting approval
+- <strong>Countdown Timer</strong>: For auto-submission modes
+- <strong>Action Buttons</strong>: Approve, reject, edit, continue options</p>
+<h3 id="history-cells">History Cells<a class="headerlink" href="#history-cells" title="Permanent link">&para;</a></h3>
+<p>Special history cells showing:
+- <strong>Card Title</strong>: Goal description
+- <strong>Status Badge</strong>: Running/Paused/Failed/Complete
+- <strong>Action Log</strong>: Timestamp-annotated actions
+- <strong>Completion Animation</strong>: Celebration effect when done
+- <strong>Gradient Effects</strong>: Visual progression through phases</p>
+<h3 id="auto-drive-cards">Auto-Drive Cards<a class="headerlink" href="#auto-drive-cards" title="Permanent link">&para;</a></h3>
+<p>Higher-level card abstraction managing:
+- <strong>Card Lifecycle</strong>: Creation, updates, completion
+- <strong>Session Tracking</strong>: Multiple concurrent Auto-Drive sessions
+- <strong>Card Persistence</strong>: Long-term session tracking</p>
+<h2 id="auto-qa-orchestration">Auto QA Orchestration<a class="headerlink" href="#auto-qa-orchestration" title="Permanent link">&para;</a></h2>
+<p>Auto-Drive includes automated quality assurance to validate execution quality and catch issues before user review.</p>
+<h3 id="observer-lifecycle">Observer Lifecycle<a class="headerlink" href="#observer-lifecycle" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph LR
+    A["Bootstrap&lt;br/&gt;Passive Monitoring"]
+    B["Cadence Checks&lt;br/&gt;Periodic Validation"]
+    C["Cross-Check&lt;br/&gt;Before Completion"]
+    D["Complete"]
+
+    A --&gt;|Every N turns| B
+    B --&gt;|Final Step| C
+    C --&gt;|Pass| D
+    C --&gt;|Fail| A</code></pre>
+<h3 id="bootstrap-phase">Bootstrap Phase<a class="headerlink" href="#bootstrap-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Duration</strong>: First coordinator turn</li>
+<li><strong>Tool Access</strong>: Read-only operations only</li>
+<li><strong>Purpose</strong>: Initialize observer, gather baseline state</li>
+<li><strong>Example</strong>: <code>ls</code>, <code>pwd</code>, <code>git status</code> (safe inspection)</li>
+</ul>
+<h3 id="cadence-phase">Cadence Phase<a class="headerlink" href="#cadence-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Frequency</strong>: Every <code>CODE_QA_CADENCE</code> turns (default: 3)</li>
+<li><strong>Tool Access</strong>: Limited safe operations</li>
+<li><strong>Purpose</strong>: Periodic health checks</li>
+<li><strong>Example</strong>: Verify build still compiles, tests still pass</li>
+</ul>
+<h3 id="cross-check-phase">Cross-Check Phase<a class="headerlink" href="#cross-check-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Trigger</strong>: Before marking completion</li>
+<li><strong>Tool Access</strong>: Full audit capabilities</li>
+<li><strong>Purpose</strong>: Final validation before user review</li>
+<li><strong>Example</strong>: Full test suite execution, comprehensive validation</li>
+</ul>
+<h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nv">CODE_QA_CADENCE</span><span class="o">=</span><span class="m">3</span><span class="w">              </span><span class="c1"># Turns between observer checks</span>
+<span class="nv">CODE_QA_REVIEW_COOLDOWN_TURNS</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="c1"># Turns before review request</span>
+</code></pre></div>
+<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<p>Auto-Drive distinguishes between error types:</p>
+<h3 id="transient-errors">Transient Errors<a class="headerlink" href="#transient-errors" title="Permanent link">&para;</a></h3>
+<p>Temporarily retried with exponential backoff:
+- Network timeouts
+- Rate limiting (429)
+- Temporary service unavailability
+- Resource contention</p>
+<p>Recovery: Automatic retry with backoff, max 6 attempts</p>
+<h3 id="user-recoverable-errors">User-Recoverable Errors<a class="headerlink" href="#user-recoverable-errors" title="Permanent link">&para;</a></h3>
+<p>Require user feedback:
+- Invalid goal specification
+- Ambiguous instructions
+- Contradictory requirements</p>
+<p>Recovery: Controller transitions to <code>PausedManual</code> for editing</p>
+<h3 id="terminal-errors">Terminal Errors<a class="headerlink" href="#terminal-errors" title="Permanent link">&para;</a></h3>
+<p>Require manual intervention:
+- Invalid credentials
+- Permissions issues
+- Configuration problems</p>
+<p>Recovery: User must edit and restart</p>
+<h2 id="token-management">Token Management<a class="headerlink" href="#token-management" title="Permanent link">&para;</a></h2>
+<p>Auto-Drive implements sophisticated token management:</p>
+<h3 id="token-tracking">Token Tracking<a class="headerlink" href="#token-tracking" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Each turn logs input and output tokens</li>
+<li>Running total maintained in session metrics</li>
+<li>4-byte approximation for quick estimation</li>
+</ul>
+<h3 id="compaction-triggers">Compaction Triggers<a class="headerlink" href="#compaction-triggers" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Threshold</strong>: Token usage &gt; 75% of limit</li>
+<li><strong>Initiated By</strong>: Coordinator detects threshold</li>
+<li><strong>Compaction Process</strong>: Summarizes older turns, keeps recent turns</li>
+<li><strong>Result</strong>: History fits within token limits for next turn</li>
+</ol>
+<h3 id="context-window-strategy">Context Window Strategy<a class="headerlink" href="#context-window-strategy" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Preserve</strong>: Recent 10 turns in full detail</li>
+<li><strong>Summarize</strong>: Older turns compressed to key decisions</li>
+<li><strong>Drop</strong>: Very old turns if necessary for fit</li>
+</ul>
+<h2 id="development-and-testing">Development and Testing<a class="headerlink" href="#development-and-testing" title="Permanent link">&para;</a></h2>
+<h3 id="fault-injection-faultsrs">Fault Injection (<code>faults.rs</code>)<a class="headerlink" href="#fault-injection-faultsrs" title="Permanent link">&para;</a></h3>
+<p>Behind <code>dev-faults</code> feature flag, allows testing error scenarios:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#[cfg(feature = </span><span class="s">&quot;dev-faults&quot;</span><span class="cp">)]</span>
+<span class="n">simulate_network_error</span><span class="p">()</span><span class="o">?</span><span class="p">;</span>
+
+<span class="cp">#[cfg(feature = </span><span class="s">&quot;dev-faults&quot;</span><span class="cp">)]</span>
+<span class="n">simulate_rate_limit</span><span class="p">()</span><span class="o">?</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="local-testing">Local Testing<a class="headerlink" href="#local-testing" title="Permanent link">&para;</a></h3>
+<p>Test Auto-Drive with realistic scenarios:</p>
+<ol>
+<li>Long-running goal (triggers compaction)</li>
+<li>Network failure (triggers retry)</li>
+<li>User interruption (tests state cleanup)</li>
+<li>Complex multi-step workflow (tests planning)</li>
+</ol>
+<h2 id="performance-characteristics">Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permanent link">&para;</a></h2>
+<h3 id="latency">Latency<a class="headerlink" href="#latency" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Goal Submission to First Plan</strong>: 2-5 seconds (Claude latency)</li>
+<li><strong>Status Query</strong>: &lt;100ms (routed query)</li>
+<li><strong>Phase Transitions</strong>: &lt;50ms (state machine)</li>
+<li><strong>History Compaction</strong>: 500-1000ms for large histories</li>
+</ul>
+<h3 id="token-efficiency">Token Efficiency<a class="headerlink" href="#token-efficiency" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Typical Goal</strong>: 5,000-10,000 tokens for complete session</li>
+<li><strong>Complex Goal</strong>: 50,000-100,000 tokens possible</li>
+<li><strong>Compaction Overhead</strong>: ~10% token reduction per compaction</li>
+</ul>
+<h3 id="scalability">Scalability<a class="headerlink" href="#scalability" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Concurrent Sessions</strong>: Limited only by TUI capacity</li>
+<li><strong>Turn Depth</strong>: Unlimited (compaction handles arbitrarily long sessions)</li>
+<li><strong>History Size</strong>: Multi-megabyte histories supported</li>
+</ul>
+<h2 id="integration-points">Integration Points<a class="headerlink" href="#integration-points" title="Permanent link">&para;</a></h2>
+<p>Auto-Drive integrates with:</p>
+<ol>
+<li><strong>Claude AI</strong>: For planning and decision-making</li>
+<li><strong>Agent Executor</strong>: For running generated CLI actions</li>
+<li><strong>TUI</strong>: For user interaction and visualization</li>
+<li><strong>History System</strong>: For conversation persistence</li>
+<li><strong>Configuration System</strong>: For user preferences</li>
+</ol>
+<h2 id="future-enhancements">Future Enhancements<a class="headerlink" href="#future-enhancements" title="Permanent link">&para;</a></h2>
+<h3 id="core-improvements">Core Improvements<a class="headerlink" href="#core-improvements" title="Permanent link">&para;</a></h3>
+<p>Potential improvements to Auto-Drive architecture:</p>
+<ol>
+<li><strong>Distributed Execution</strong>: Run multiple parallel action sequences</li>
+<li><strong>Learning</strong>: Refine decision-making based on outcomes</li>
+<li><strong>Tool Integration</strong>: Custom tool definitions for domain-specific tasks</li>
+<li><strong>Observability</strong>: Enhanced tracing and debugging tools</li>
+<li><strong>Multi-Agent Coordination</strong>: Collaborative agent workflows</li>
+</ol>
+<h3 id="pubsub-systems-for-multi-agent-communication">Pub/Sub Systems for Multi-Agent Communication<a class="headerlink" href="#pubsub-systems-for-multi-agent-communication" title="Permanent link">&para;</a></h3>
+<p>A critical enabler for distributed execution and multi-agent coordination is a publish-subscribe (pub/sub) messaging system that decouples sub-agents from each other, enabling asynchronous, scalable communication patterns.</p>
+<p><strong>Current Limitation</strong>: Today, agents work in isolation and communicate through point-to-point callbacks and shared state. This limits parallelism and makes it difficult for agents to learn from each other's work.</p>
+<p><strong>Pub/Sub Solution</strong>: Introducing a message-oriented event bus would enable:</p>
+<ul>
+<li><strong>Agent Progress Broadcasting</strong>: Sub-agents can publish their status, discoveries, and intermediate results to a shared event bus, with multiple subscribers (TUI, metrics collector, distributed tracer, other agents) consuming relevant events</li>
+<li><strong>Strategy Sharing</strong>: In MARS-style multi-agent systems, agents can broadcast discovered strategies or heuristics, allowing peer agents to incorporate successful approaches without blocking</li>
+<li><strong>Work Coordination</strong>: Agents can announce what they're working on, enabling collaborative systems to avoid duplicate effort and distribute work more intelligently</li>
+<li><strong>Result Aggregation</strong>: Multiple agents working on parallel tasks can publish results asynchronously, with an aggregator subscribing to compile final outputs</li>
+</ul>
+<p><strong>Evolution Path</strong>: The system can evolve in two phases:</p>
+<ul>
+<li>
+<p><strong>Phase 1 - Local Coordination</strong>: For single-node setups, lightweight <strong>internal Rust-based event buses</strong> using tokio's <code>broadcast</code> channels or libraries like <code>async-channel</code> provide low-latency, in-process pub/sub without external dependencies</p>
+</li>
+<li>
+<p><strong>Phase 2 - Distributed Scaling</strong>: As Auto-Drive scales to multi-node deployments, external <strong>message brokers</strong> enable geography-distributed agent coordination:</p>
+</li>
+<li><strong>Apache Kafka</strong>: Highly scalable distributed event streaming platform ideal for high-throughput data pipelines and durable event logs</li>
+<li><strong>RabbitMQ</strong>: Feature-rich message broker with flexible routing patterns, persistence guarantees, and support for multiple messaging protocols</li>
+<li><strong>Apache Pulsar</strong>: Modern distributed platform developed by Yahoo!, known for high scalability and multi-tenant capabilities</li>
+<li><strong>ActiveMQ</strong>: Lightweight open-source broker with broad protocol support, suitable for smaller deployments</li>
+<li><strong>Redis</strong>: Fast, simple pub/sub suitable for low-latency, non-persistent messaging in lightweight scenarios</li>
+</ul>
+<p>A pub/sub layer would also enhance observability by funneling all agent activities through typed events, enabling comprehensive tracing, metrics collection, and audit logging for complex multi-agent workflows.</p>
+<p><strong>Complementary Pattern</strong>: The pub/sub architecture can be combined with the <strong>actor model</strong> for even more powerful concurrent system design. In the actor model, each agent is an independent actor that receives messages asynchronously and processes them in isolation, avoiding shared mutable state. Tokio's async runtime is well-suited for implementing actor patterns in Rust.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<h3 id="internal-documentation">Internal Documentation<a class="headerlink" href="#internal-documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="../../../auto-drive-state-inventory/">State Inventory</a> - Detailed state management</li>
+<li><a href="../../../auto-drive-phase-migration-TODO/">Phase Migration</a> - Migration guide</li>
+<li><a href="../../../auto-qa/">Auto QA Documentation</a> - Quality assurance details</li>
+<li>Source: <code>code-rs/code-auto-drive-core/</code></li>
+</ul>
+<h3 id="further-reading-on-concurrent-patterns">Further Reading on Concurrent Patterns<a class="headerlink" href="#further-reading-on-concurrent-patterns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://ryhl.io/blog/actors-with-tokio/">Actors with Tokio</a> - Comprehensive guide to implementing the actor pattern with Tokio for concurrent, message-driven architecture</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      
+        <script src="../../../js/mermaid-init.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
