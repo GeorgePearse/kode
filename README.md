@@ -22,7 +22,7 @@
 Read the full notes in `release-notes/RELEASE_NOTES.md`.
 
 &ensp;
-## Why Code
+## Why kode
 
 - 🚀 **Auto Drive orchestration** – Multi-agent automation that now self-heals and ships complete tasks.
 - 🌐 **Browser Integration** – CDP support, headless browsing, screenshots captured inline.
@@ -31,6 +31,51 @@ Read the full notes in `release-notes/RELEASE_NOTES.md`.
 - 🎨 **Theme system** – Switch between accessible presets, customize accents, and preview live via `/themes`.
 - 🔌 **MCP support** – Extend with filesystem, DBs, APIs, or your own tools.
 - 🔒 **Safety modes** – Read-only, approvals, and workspace sandboxing.
+
+&ensp;
+## Related Tools & Comparison
+
+kode is part of an evolving ecosystem of AI coding agents. Here's how it compares to other tools:
+
+### CLI Tools
+
+- **[Aider](https://aider.chat/)** – Git-aware AI pair programmer with code editing capabilities
+- **[OpenCode](https://github.com/computer-use-enabled/opencode)** – Computer use-enabled coding agent
+- **[Cline](https://github.com/cline/cline)** – VS Code extension for agentic coding workflows
+- **[Goose](https://www.goose.dev/)** – Extensible coding agent with custom tool support
+- **[Plandex](https://plandex.ai/)** – Task-driven planning and execution agent
+- **[Gemini CLI](https://github.com/google/gemini-cli)** – Google's command-line AI agent
+- **[AIChat](https://github.com/sigoden/aichat)** – Lightweight terminal AI chat with code support
+
+### IDE Extensions
+
+- **[Continue](https://continue.dev/)** – Open-source VS Code/JetBrains copilot alternative
+- **[Roo Code](https://github.com/RooVetGit/Roo-Cline)** – Enhanced agentic coding in your IDE
+- **[Tabby](https://www.tabby.ai/)** – Self-hosted code completion and chat
+
+### Local Infrastructure
+
+- **[Ollama](https://ollama.ai/)** – Run large language models locally
+- **[LM Studio](https://lmstudio.ai/)** – User-friendly local LLM management
+
+### Code Understanding
+
+- **[Serena](https://github.com/getserenadeai/serenadeai)** – Semantic code analysis toolkit (planned kode integration)
+
+## Implementation Patterns
+
+kode demonstrates key patterns in modern AI agent design:
+
+- **Multi-model support** – Switch between Claude, Gemini, GPT-5, Qwen without rewriting
+- **MCP integration** – Standardized protocol for extending agent capabilities
+- **Context management** – Intelligent codebase analysis and memory across sessions
+- **Sandboxed execution** – Safe code execution with approval workflows
+- **CLI/Extension duality** – Works as standalone CLI or alongside IDE tools
+- **Provider independence** – Not locked to single AI vendor or provider
+- **Client/server architecture** – Browser CDP, agent coordination, modular design
+- **Self-hosted options** – Run locally or point to custom endpoints
+- **Custom commands** – `/plan`, `/code`, `/solve` provide semantic task decomposition
+- **Plan/Act separation** – Reasoning and execution as distinct phases
 
 &ensp;
 ## AI Videos
