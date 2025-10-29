@@ -67,6 +67,14 @@ pub struct MarsConfig {
     /// Default: true
     pub moa_fallback_enabled: bool,
 
+    /// Provider configuration for multi-model support
+    /// Default: None (use default ModelClient)
+    pub provider_routing: Option<crate::provider_config::ProviderRoutingConfig>,
+
+    /// Enable multi-provider agent routing
+    /// Default: false
+    pub enable_multi_provider: bool,
+
     /// Request timeout in seconds
     /// Default: 300
     pub timeout_seconds: u64,
@@ -95,6 +103,8 @@ impl Default for MarsConfig {
             aggregation_method: crate::types::AggregationMethod::RSA,
             moa_num_completions: 3,
             moa_fallback_enabled: true,
+            provider_routing: None,
+            enable_multi_provider: false,
             timeout_seconds: 300,
             debug: false,
         }
@@ -194,6 +204,21 @@ impl MarsConfig {
     /// Set MOA fallback behavior
     pub fn with_moa_fallback_enabled(mut self, enabled: bool) -> Self {
         self.moa_fallback_enabled = enabled;
+        self
+    }
+
+    /// Set provider routing configuration for multi-model support
+    pub fn with_provider_routing(
+        mut self,
+        routing: crate::provider_config::ProviderRoutingConfig,
+    ) -> Self {
+        self.provider_routing = Some(routing);
+        self
+    }
+
+    /// Enable multi-provider agent routing
+    pub fn with_multi_provider_enabled(mut self, enabled: bool) -> Self {
+        self.enable_multi_provider = enabled;
         self
     }
 
