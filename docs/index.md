@@ -1,142 +1,84 @@
-# MARS - Multi-Agent Reasoning System
+# kode
 
-A production-ready Rust implementation of advanced LLM optimization techniques, achieving **69% improvement on AIME 2025** benchmarks.
+**kode** is a fast, local coding agent for your terminal. It's a community-driven fork of `openai/codex` focused on real developer ergonomics: Browser integration, multi-agents, theming, and reasoning control — all while staying compatible with upstream.
 
-![Benchmark Results](../images/benchmarks.png)
+## What's New in v0.4.0 (October 26, 2025)
 
-## Why MARS?
+- **Auto Drive upgraded** – hand `/auto` a task and it now plans, coordinates agents, reruns checks, and recovers from hiccups without babysitting.
+- **Unified settings** – `/settings` centralizes limits, model routing, themes, and CLI integrations so you can audit configuration in one place.
+- **Card-based activity** – Agents, browser sessions, web search, and Auto Drive render as compact cards with drill-down overlays for full logs.
+- **Turbocharged performance** – History rendering and streaming were optimized to stay smooth even during long multi-agent sessions.
+- **Smarter agents** – Mix and match orchestrator CLIs (Claude, Gemini, GPT-5, Qwen, and more) per `/plan`, `/code`, or `/solve` run.
 
-Complex reasoning tasks require more than a single pass through a language model. MARS coordinates multiple agents with different exploration strategies to:
+## Why kode
 
-- **Explore different solution paths** - Temperature diversity (0.3, 0.6, 1.0) encourages varied approaches
-- **Verify and improve solutions** - Cross-agent verification catches errors and identifies weak points
-- **Aggregate diverse insights** - Combine perspectives using MOA (horizontal) or MCTS (vertical) strategies
-- **Synthesize optimal answers** - Select best solution via majority voting, verification scores, or synthesis
-
-## Key Features
-
-✅ **5-Phase Pipeline** - Exploration → Aggregation → Verification → Improvement → Synthesis
-
-✅ **Multiple Aggregation Strategies** - MOA for diversity, MCTS for deep exploration, RSA for iteration
-
-✅ **Cross-Model Support** - Works with ModelClient, litellm-rs, or any custom LLM provider
-
-✅ **Comprehensive Verification** - 2-pass consensus verification with detailed feedback
-
-✅ **Production Ready** - Async/await, error handling, event streaming, configurability
-
-## Benchmark Results
-
-| Benchmark | Baseline | MARS | Improvement |
-|-----------|----------|------|-------------|
-| **AIME 2025** | 43.3% | 73.3% | **+30 pp (+69%)** |
-| **IMO 2025** | 16.7% | 33.3% | **+16.7 pp (+100%)** |
-| **LiveCodeBench** | 39.05% | 50.48% | **+11.43 pp (+29%)** |
+- 🚀 **Auto Drive orchestration** – Multi-agent automation that now self-heals and ships complete tasks.
+- 🌐 **Browser Integration** – CDP support, headless browsing, screenshots captured inline.
+- 🤖 **Multi-agent commands** – `/plan`, `/code` and `/solve` coordinate multiple CLI agents.
+- 🧭 **Unified settings hub** – `/settings` overlay for limits, theming, approvals, and provider wiring.
+- 🎨 **Theme system** – Switch between accessible presets, customize accents, and preview live via `/themes`.
+- 🔌 **MCP support** – Extend with filesystem, DBs, APIs, or your own tools.
+- 🔒 **Safety modes** – Read-only, approvals, and workspace sandboxing.
 
 ## Quick Start
 
-```rust
-use code_mars::{MarsCoordinator, MarsConfig};
-use code_core::ModelClient;
-
-// Create coordinator
-let config = MarsConfig::default()
-    .with_advanced_features()
-    .with_moa_aggregation();
-
-let mut coordinator = MarsCoordinator::new(config);
-let client = ModelClient::new(...);
-
-// Run MARS
-let result = coordinator.run_with_client(query, &client).await?;
-println!("Answer: {}", result.answer);
+### Run
+```bash
+npx -y @just-every/code
 ```
 
-## What's Different?
-
-### vs Single-Shot LLM
-- **MARS**: Multiple agents explore different paths, verify answers, iteratively improve
-- **Single-Shot**: One attempt, no verification, no improvement loop
-
-### vs Simple Ensemble
-- **MARS**: Sophisticated aggregation (MOA for diversity, MCTS for depth)
-- **Simple**: Basic voting without specialized exploration strategies
-
-### vs Tree-of-Thought
-- **MARS**: Uses multiple reasoning strategies (MOA + MCTS) coordinated by verification
-- **Tree-of-Thought**: Single strategy without cross-agent verification
-
-## Architecture at a Glance
-
-```
-Phase 1: Multi-Agent Exploration
-    ↓ (3 agents × 3 temperatures)
-Phase 2a: Solution Aggregation (MOA/MCTS/RSA)
-    ↓ (synthesize improved solutions)
-Phase 2b: Strategy Network
-    ↓ (extract and share insights)
-Phase 3: Cross-Agent Verification
-    ↓ (2-pass consensus)
-Phase 4: Iterative Improvement
-    ↓ (max 5 iterations on unverified)
-Phase 5: Final Synthesis
-    ↓ (majority voting → best verified → synthesized)
-Answer
+### Install & Run
+```bash
+npm install -g @just-every/code
+code // or `coder` if you're using VS Code
 ```
 
-## Documentation Structure
+**Authenticate** (one of the following):
+- **Sign in with ChatGPT** (Plus/Pro/Team; uses models available to your plan)
+  - Run `code` and pick "Sign in with ChatGPT"
+- **API key** (usage-based)
+  - Set `export OPENAI_API_KEY=xyz` and run `code`
 
-- **[Getting Started](getting-started/overview.md)** - Installation and quick start
-- **[Architecture](architecture/overview.md)** - Detailed system design
-- **[Aggregation Methods](aggregation/overview.md)** - MOA, MCTS, RSA strategies
-- **[Configuration](configuration/config.md)** - How to customize MARS
-- **[Usage Examples](usage/basic.md)** - Code samples and patterns
-- **[Performance](performance/benchmarks.md)** - Optimization and costs
-- **[API Reference](api/types.md)** - Complete API documentation
+## Key Features
 
-## Use Cases
+### Multi-Agent Commands
+- `/plan` - Plan code changes (Claude, Gemini and GPT-5 consensus)
+- `/solve` - Solve complex problems (fastest preferred)
+- `/code` - Write code! (consensus approach)
 
-### Mathematical Problem Solving
-Complex proofs, geometry, algebra - use **MOA** for diverse approaches
+### Auto Drive
+- Hand off multi-step tasks; Auto Drive coordinates agents and approvals
+- `/auto "Refactor the auth flow and add device login"`
 
-### Multi-Step Reasoning
-Chains of thought, logic puzzles - use **MCTS** for strategic exploration
+### Browser Integration
+- Connect to external Chrome browser via CDP
+- Use internal headless browser mode
+- Screenshots captured inline for visual context
 
-### Creative Writing
-Stories, essays - use **RSA** for iterative refinement
-
-### Code Generation
-Complex programs - use **MOA** for parallel implementations
-
-## Implementation Details
-
-- **Language**: Rust 1.75+
-- **Async Runtime**: Tokio
-- **Test Coverage**: 43 unit + 29 integration tests
-- **Code Size**: ~3,500 LOC
-- **Dependencies**: Minimal (workspace deps)
-
-## Citation
-
-If you use MARS in your research, please cite:
-
-```bibtex
-@software{mars-2025,
-  title={MARS: Multi-Agent Reasoning System},
-  author={Code Project},
-  year={2025},
-  url={https://github.com/GeorgePearse/code}
-}
-```
+### Settings & Configuration
+- Centralized `/settings` for all configuration
+- Theme system with accessible presets
+- Model routing and reasoning controls
 
 ## Next Steps
 
-1. [Install MARS](getting-started/installation.md)
-2. [Read the Quick Start](getting-started/quick-start.md)
-3. [Explore Architecture](architecture/overview.md)
-4. [Learn Aggregation Methods](aggregation/overview.md)
-5. [Run Examples](usage/basic.md)
+- [Installation Guide](install.md)
+- [Getting Started](getting-started.md)
+- [Command Reference](slash-commands.md)
+- [Configuration Guide](config.md)
+
+## Contributing
+
+We welcome contributions! This fork maintains compatibility with upstream while adding community-requested features.
+
+See our [Contributing Guide](contributing.md) for details.
+
+## License
+
+Apache 2.0 - See [LICENSE](license.md) file for details.
+
+This project is a community fork of the original Codex CLI. We maintain compatibility while adding enhanced features requested by the developer community.
 
 ---
 
-**Questions?** Check the [references](references.md) for papers and resources.
+Need help? Open an issue on [GitHub](https://github.com/GeorgePearse/kode/issues) or check our documentation.

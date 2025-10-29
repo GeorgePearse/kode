@@ -1,11 +1,8 @@
-site_name: MARS - Multi-Agent Reasoning System
-site_description: Production-ready Rust implementation of advanced LLM optimization techniques
-site_author: Code Project
-site_url: https://GeorgePearse.github.io/code/
-
-repo_name: GeorgePearse/code
-repo_url: https://github.com/GeorgePearse/code
-edit_uri: edit/main/docs/
+site_name: kode
+site_description: A fast, local coding agent for your terminal
+site_url: https://github.com/GeorgePearse/kode
+repo_url: https://github.com/GeorgePearse/kode
+repo_name: kode
 
 theme:
   name: material
@@ -13,82 +10,58 @@ theme:
     - navigation.instant
     - navigation.tracking
     - navigation.tabs
-    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
     - content.code.copy
-    - content.code.annotate
-    - toc.follow
   palette:
     - scheme: default
       primary: blue
-      accent: orange
+      accent: blue
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
       primary: blue
-      accent: orange
+      accent: blue
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
-  icon:
-    repo: fontawesome/brands/github
 
 plugins:
   - search
-  - mkdocstrings:
-      default_handler: python
-      handlers:
-        python:
-          rendering:
-            show_source: true
+  - glightbox
 
 markdown_extensions:
   - pymdownx.highlight:
       use_pygments: true
   - pymdownx.superfences
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:pymdownx.emoji.twemoji
-      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - admonition
-  - pymdownx.details
-  - tables
-  - attr_list
-  - md_in_html
+  - toc:
+      permalink: true
 
 nav:
   - Home: index.md
   - Getting Started:
-    - Overview: getting-started/overview.md
-    - Installation: getting-started/installation.md
-    - Quick Start: getting-started/quick-start.md
-  - Architecture:
-    - System Overview: architecture/overview.md
-    - 5-Phase Pipeline: architecture/pipeline.md
-    - Core Components: architecture/components.md
-  - Aggregation Methods:
-    - Overview: aggregation/overview.md
-    - MOA (Mixture of Agents): aggregation/moa.md
-    - MCTS (Monte Carlo Tree Search): aggregation/mcts.md
-    - RSA (Reward-Seeking Aggregation): aggregation/rsa.md
-  - Configuration:
-    - Configuration Guide: configuration/config.md
-    - Advanced Settings: configuration/advanced.md
-    - Environment Variables: configuration/env.md
+    - Installation: install.md
+    - Getting Started: getting-started.md
   - Usage:
-    - Basic Usage: usage/basic.md
-    - Advanced Examples: usage/advanced.md
-    - CLI Integration: usage/cli.md
-  - Performance:
-    - Benchmarks: performance/benchmarks.md
-    - Optimization: performance/optimization.md
-    - Cost Analysis: performance/cost.md
-  - API Reference:
-    - Core Types: api/types.md
-    - Coordinator: api/coordinator.md
-    - Aggregator: api/aggregator.md
-  - Contributing: contributing.md
-  - References: references.md
+    - Commands: slash-commands.md
+    - Configuration: config.md
+    - Authentication: authentication.md
+    - Theme Configuration: THEME_CONFIG.md
+  - Advanced:
+    - Advanced Topics: advanced.md
+    - Sandbox Mode: sandbox.md
+    - Execution: exec.md
+  - Architecture:
+    - Fork Enhancements: fork-enhancements.md
+  - Contribution:
+    - Contributing: contributing.md
+    - CLA: CLA.md
+  - Legal:
+    - License: license.md
