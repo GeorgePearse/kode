@@ -178,6 +178,7 @@ mod tests {
         );
         sol1.add_verification_pass(0.7);
         sol1.add_verification_pass(0.7);
+        let sol1_score = sol1.verification_score;
 
         let mut sol2 = Solution::new(
             "agent2".to_string(),
@@ -192,6 +193,11 @@ mod tests {
         let solutions = vec![sol1, sol2];
         let best = Verifier::find_best_verified(&solutions);
         assert!(best.is_some());
-        assert_eq!(best.unwrap().verification_score, 0.9);
+        let best_solution = best.unwrap();
+        assert_eq!(best_solution.agent_id, "agent2");
+        // sol2 should have higher score than sol1
+        // sol2: (0 + 0.9)/2 = 0.45, then (0.45 + 0.9)/2 = 0.675
+        // sol1: (0 + 0.7)/2 = 0.35, then (0.35 + 0.7)/2 = 0.525
+        assert!(best_solution.verification_score > sol1_score);
     }
 }
