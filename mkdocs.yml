@@ -35,7 +35,11 @@ plugins:
 markdown_extensions:
   - pymdownx.highlight:
       use_pygments: true
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
@@ -119,3 +123,7 @@ nav:
     - CLA: CLA.md
   - Legal:
     - License: license.md
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js
+  - js/mermaid-init.js
