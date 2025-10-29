@@ -1,0 +1,94 @@
+site_name: MARS - Multi-Agent Reasoning System
+site_description: Production-ready Rust implementation of advanced LLM optimization techniques
+site_author: Code Project
+site_url: https://GeorgePearse.github.io/code/
+
+repo_name: GeorgePearse/code
+repo_url: https://github.com/GeorgePearse/code
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+    - content.code.annotate
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: blue
+      accent: orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - admonition
+  - pymdownx.details
+  - tables
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Overview: getting-started/overview.md
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+  - Architecture:
+    - System Overview: architecture/overview.md
+    - 5-Phase Pipeline: architecture/pipeline.md
+    - Core Components: architecture/components.md
+  - Aggregation Methods:
+    - Overview: aggregation/overview.md
+    - MOA (Mixture of Agents): aggregation/moa.md
+    - MCTS (Monte Carlo Tree Search): aggregation/mcts.md
+    - RSA (Reward-Seeking Aggregation): aggregation/rsa.md
+  - Configuration:
+    - Configuration Guide: configuration/config.md
+    - Advanced Settings: configuration/advanced.md
+    - Environment Variables: configuration/env.md
+  - Usage:
+    - Basic Usage: usage/basic.md
+    - Advanced Examples: usage/advanced.md
+    - CLI Integration: usage/cli.md
+  - Performance:
+    - Benchmarks: performance/benchmarks.md
+    - Optimization: performance/optimization.md
+    - Cost Analysis: performance/cost.md
+  - API Reference:
+    - Core Types: api/types.md
+    - Coordinator: api/coordinator.md
+    - Aggregator: api/aggregator.md
+  - Contributing: contributing.md
+  - References: references.md
