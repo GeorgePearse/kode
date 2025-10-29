@@ -48,18 +48,71 @@ nav:
   - Home: index.md
   - Getting Started:
     - Installation: install.md
-    - Getting Started: getting-started.md
+    - Quick Start: getting-started.md
+    - Getting Started Details:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quick-start.md
   - Usage:
     - Commands: slash-commands.md
     - Configuration: config.md
     - Authentication: authentication.md
     - Theme Configuration: THEME_CONFIG.md
+    - Basic Usage: usage/basic.md
   - Advanced:
     - Advanced Topics: advanced.md
     - Sandbox Mode: sandbox.md
     - Execution: exec.md
+    - MCP Integration: upstream-mcp-implementation-guide.md
+    - MCP Reuse Strategy: upstream-mcp-reuse-strategy.md
+  - Features:
+    - Auto Drive:
+      - State Inventory: auto-drive-state-inventory.md
+      - Phase Migration: auto-drive-phase-migration-TODO.md
+    - Prompts: prompts.md
+    - Integration - Zed: integration-zed.md
+    - Auto QA: auto-qa.md
   - Architecture:
     - Fork Enhancements: fork-enhancements.md
+    - Overview:
+      - Pipeline: architecture/pipeline.md
+      - Overview: architecture/overview.md
+    - Aggregation:
+      - Overview: aggregation/overview.md
+      - MOA: aggregation/moa.md
+      - MCTS: aggregation/mcts.md
+      - RSA: aggregation/rsa.md
+  - Technical Deep Dives:
+    - History & Caching:
+      - History Render Cache Bridge: history_render_cache_bridge.md
+      - History State Schema: history_state_schema.md
+      - History Debugging: dev/history-debugging.md
+      - History Invariants: dev/history-invariants.md
+    - TUI & UI:
+      - Card Themes: tui-card-themes.md
+      - Chat Widget Refactor: tui-chatwidget-refactor.md
+    - Upstream:
+      - ACP Merge: upstream-acp-merge.md
+      - MCP Implementation: upstream-mcp-implementation-guide.md
+    - Performance:
+      - Benchmarks: performance/benchmarks.md
+    - Configuration:
+      - Config Reference: configuration/config.md
+    - API:
+      - Types: api/types.md
+  - Maintenance:
+    - Release Management: release_management.md
+    - Prompt Architecture: maintenance/prompt-architecture.md
+    - Upstream Diff: maintenance/upstream-diff.md
+  - References:
+    - References: references.md
+    - FAQ: faq.md
+    - Platform Sandboxing: platform-sandboxing.md
+    - Markdown Showcase: markdown_showcase.md
+    - Open Source Fund: open-source-fund.md
+    - ZDR: zdr.md
+    - Experimental: experimental.md
+    - Homebrew: HOMEBREW.md
+    - Interrupt & Resume: interrupt-resume-postmortem.md
   - Contribution:
     - Contributing: contributing.md
     - CLA: CLA.md
