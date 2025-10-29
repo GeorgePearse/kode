@@ -155,6 +155,51 @@ Comprehensive trace capture and visualization for agent execution flows:
 - Automatic trace linking between parent and child agent tasks
 - Export as JSON, OTLP, or integration-specific formats
 
+### Performance Optimization: In-Memory File Cache (Planned)
+
+An in-memory cache layer for frequently read or edited files during a session:
+
+**Concept:**
+- **Session-scoped cache** – Store file contents and edits in memory during active development to avoid redundant disk reads
+- **Edit tracking** – Track modifications made during the session to detect conflicts or stale reads
+- **Smart invalidation** – Automatically invalidate cache when files are modified externally or by other agents
+- **Stats and monitoring** – Inspect cache hit rates and memory usage via `/cache` command
+
+**Benefits:**
+- Faster repeated file reads during multi-agent planning and code execution
+- Reduced disk I/O during intensive refactoring or analysis tasks
+- Better performance for large codebases where file operations are a bottleneck
+- Session consistency when agents read and edit the same files
+
+**Implementation approach:**
+- LRU (Least Recently Used) cache with configurable max size
+- Track file timestamps to detect external modifications
+- Expose cache management via CLI (inspect, clear, stats)
+- Optional persistent cache across sessions for large stable files
+
+**Inspiration:**
+- [rust-analyzer metrics dashboard](https://rust-analyzer.github.io/metrics/) – Real-world example of performance monitoring and acceleration tracking across time periods. Demonstrates effective visualization of code acceleration metrics and performance trends.
+
+&ensp;
+## Inspirations & References
+
+kode's design and roadmap are informed by proven patterns from leading open-source projects:
+
+### Agent Orchestration & Multi-Agent Workflows
+- **[ModelScope ms-agent](https://github.com/modelscope/ms-agent)** – Agent-centric orchestration with async/await patterns, chain-based multi-agent workflows, pluggable tool/plugin system, and configuration-driven lifecycle management. Demonstrates clear callback-based observability patterns.
+
+### Metrics, Benchmarking & Performance Tracking
+- **[rust-analyzer](https://github.com/rust-lang/rust-analyzer)** – Comprehensive metrics collection via xtask, JSONL-based historical data storage, and GitHub Pages visualization with Plotly.js. Architecture shows how to track multiple dimensions (build time, inference time, memory usage) across projects with minimal infrastructure overhead.
+- **[PyKEEN](https://github.com/pykeen/pykeen)** – Multi-backend result tracking abstraction (W&B, TensorBoard, MLflow, CSV, JSON), hierarchical metric system with 20+ metric variants, pluggable callback system, and automatic memory optimization through binary search. Demonstrates reproducible benchmarking pipelines.
+
+### Code Understanding & Codebase Navigation
+- **[Aider repomap](https://aider.chat/2023/10/22/repomap.html)** – Tree-sitter based repository mapping for compressed codebase context, semantic ranking of code entities through graph algorithms, and token-efficient code representation for LLMs. Shows how to balance context size with information density.
+- **[sombra](https://github.com/maskdotdev/sombra)** – Multi-layer graph database architecture with property graphs, hybrid indexing strategy (BTree + Label + Property), and traversal-first code understanding. Demonstrates how to expose code structure as queryable tools for LLM agents.
+- **[IndraDB](https://github.com/indradb/indradb)** – Layered query abstraction with composable pipes, indexed property-based filtering for fast lookups, pluggable datastore abstraction (Memory, RocksDB, PostgreSQL), and bi-directional edge traversal. Applicable to building queryable code dependency graphs.
+
+### Context Management & Codebase Representation
+- **[code2prompt](https://github.com/mufeedvh/code2prompt)** – Layered context pipeline with intelligent file filtering, per-file token counting, template-driven output flexibility, and Git context integration. Shows how to incrementally load codebase context with budget constraints rather than materializing full trees.
+
 &ensp;
 ## Quickstart
 
