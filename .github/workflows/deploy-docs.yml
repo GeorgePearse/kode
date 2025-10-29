@@ -12,14 +12,15 @@ on:
 
 permissions:
   contents: write
-  pages: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -35,8 +36,12 @@ jobs:
         run: mkdocs build
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          cname: ''
+        if: success()
+        run: |
+          cd site
+          git init
+          git add -A
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Deploy documentation"
+          git push -f https://${{ github.token }}@github.com/${{ github.repository }}.git HEAD:gh-pages
