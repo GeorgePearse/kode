@@ -42,7 +42,7 @@ kode is part of an evolving ecosystem of AI coding agents. Here's how it compare
 - **[Aider](https://aider.chat/)** – Git-aware AI pair programmer with code editing capabilities
 - **[OpenCode](https://github.com/computer-use-enabled/opencode)** – Computer use-enabled coding agent
 - **[Cline](https://github.com/cline/cline)** – VS Code extension for agentic coding workflows
-- **[Goose](https://www.goose.dev/)** – Extensible coding agent with custom tool support
+- **[Goose](https://github.com/block/goose)** – Extensible coding agent with custom tool support
 - **[Plandex](https://plandex.ai/)** – Task-driven planning and execution agent
 - **[Gemini CLI](https://github.com/google/gemini-cli)** – Google's command-line AI agent
 - **[AIChat](https://github.com/sigoden/aichat)** – Lightweight terminal AI chat with code support
@@ -232,7 +232,7 @@ This is a React TypeScript application with:
 
 ## Key files:
 - `/src/auth/` - Authentication logic
-- `/src/api/` - API client code  
+- `/src/api/` - API client code
 - `/server/` - Backend services
 ```
 
