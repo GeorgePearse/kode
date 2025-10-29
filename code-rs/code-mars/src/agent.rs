@@ -248,6 +248,127 @@ impl Agent {
         Ok(strategies)
     }
 
+    /// Generate an initial solution given a query with any LLM provider
+    ///
+    /// This method works with any provider implementing the LLMProvider trait,
+    /// enabling multi-model agent generation.
+    pub async fn generate_solution_with_provider(
+        &self,
+        query: &str,
+        use_thinking_tags: bool,
+        provider: &dyn crate::LLMProvider,
+    ) -> Result<Solution> {
+        // Build the system and user prompts
+        let system_prompt = if use_thinking_tags {
+            prompts::MARS_SYSTEM_PROMPT_WITH_THINKING.to_string()
+        } else {
+            prompts::MARS_SYSTEM_PROMPT.to_string()
+        };
+
+        let user_prompt = format!("{}\n\n{}", prompts::MARS_REASONING_PROMPT, query);
+
+        // Call provider
+        let full_response = provider
+            .complete(&user_prompt, Some(&system_prompt))
+            .await?;
+
+        let (reasoning, answer) = self.parse_response(&full_response).await?;
+
+        let solution = Solution::new(
+            self.id.clone(),
+            reasoning,
+            answer,
+            self.temperature,
+            full_response.len() / 4, // Rough token estimate
+        );
+
+        Ok(solution)
+    }
+
+    /// Verify another agent's solution with any LLM provider
+    pub async fn verify_solution_with_provider(
+        &self,
+        solution: &Solution,
+        provider: &dyn crate::LLMProvider,
+    ) -> Result<f32> {
+        let verification_prompt = format!(
+            "{}\n\nSolution to verify:\n{}\n\nAnswer: {}",
+            prompts::VERIFICATION_SYSTEM_PROMPT,
+            solution.reasoning,
+            solution.answer
+        );
+
+        let verification_response = provider
+            .complete(&verification_prompt, None)
+            .await?;
+
+        // Parse verification score from response
+        let score = Self::extract_verification_score(&verification_response)?;
+        Ok(score)
+    }
+
+    /// Improve an existing solution based on feedback with any LLM provider
+    pub async fn improve_solution_with_provider(
+        &self,
+        solution: &Solution,
+        feedback: &str,
+        use_thinking_tags: bool,
+        provider: &dyn crate::LLMProvider,
+    ) -> Result<Solution> {
+        let system_prompt = if use_thinking_tags {
+            prompts::MARS_SYSTEM_PROMPT_WITH_THINKING.to_string()
+        } else {
+            prompts::MARS_SYSTEM_PROMPT.to_string()
+        };
+
+        let improvement_prompt = format!(
+            "{}\n\nOriginal solution:\nReasoning: {}\nAnswer: {}\n\nFeedback: {}\n\nPlease improve the solution:",
+            prompts::IMPROVEMENT_PROMPT,
+            solution.reasoning,
+            solution.answer,
+            feedback
+        );
+
+        let improved_response = provider
+            .complete(&improvement_prompt, Some(&system_prompt))
+            .await?;
+
+        let (new_reasoning, new_answer) = self.parse_response(&improved_response).await?;
+
+        let mut improved = Solution::new(
+            self.id.clone(),
+            new_reasoning,
+            new_answer,
+            self.temperature,
+            solution.token_count,
+        );
+
+        improved.phase = crate::types::GenerationPhase::Improved;
+
+        Ok(improved)
+    }
+
+    /// Extract strategies from a solution with any LLM provider
+    pub async fn extract_strategies_with_provider(
+        &self,
+        solution: &Solution,
+        provider: &dyn crate::LLMProvider,
+    ) -> Result<Vec<String>> {
+        let extraction_prompt = format!(
+            "{}\n\nSolution:\n{}",
+            prompts::STRATEGY_EXTRACTION_PROMPT,
+            solution.reasoning
+        );
+
+        let response = provider
+            .complete(&extraction_prompt, None)
+            .await?;
+
+        // Parse strategies from response (numbered list format)
+        let strategies = Self::parse_strategies(&response);
+        Ok(strategies)
+    }
+
     /// Parse a response into reasoning and answer components
     async fn parse_response(&self, response: &str) -> Result<(String, String)> {
         // Extract reasoning from <think> tags if present

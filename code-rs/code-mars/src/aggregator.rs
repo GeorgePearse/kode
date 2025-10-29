@@ -8,7 +8,7 @@ use std::collections::HashSet;
 pub struct Aggregator;
 
 impl Aggregator {
-    /// Run MOA (Mixture of Agents) aggregation using ModelClient
+    /// Run MOA (Mixture of Agents) aggregation using any LLM provider
     ///
     /// This process:
     /// 1. Generates diverse completions with high temperature
@@ -19,14 +19,14 @@ impl Aggregator {
         system_prompt: &str,
         num_completions: usize,
         fallback_enabled: bool,
-        client: &code_core::ModelClient,
+        provider: &dyn crate::LLMProvider,
     ) -> Result<Vec<Solution>> {
         let (solution, _metadata) = crate::moa::MoaAggregator::run_moa(
             query,
             system_prompt,
             num_completions,
             fallback_enabled,
-            client,
+            provider,
         )
         .await?;
 

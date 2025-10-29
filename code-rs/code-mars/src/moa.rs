@@ -1,4 +1,3 @@
-use crate::Result;
 /// MOA (Mixture of Agents) strategy for solution aggregation.
 ///
 /// This module implements the MOA algorithm from optillm:
@@ -10,8 +9,9 @@ use crate::Result;
 /// 3. Synthesize final answer using critiques and candidates
 ///
 /// Based on references/optillm/optillm/moa.py
+
+use crate::{LLMProvider, Result};
 use crate::types::Solution;
-use futures::StreamExt;
 
 /// MOA aggregator implementing the Mixture of Agents algorithm
 pub struct MoaAggregator;
@@ -36,64 +36,29 @@ pub struct MoaMetadata {
 impl MoaAggregator {
     /// Generate N initial completions (Phase 1)
     ///
-    /// Attempts to generate N completions using the n parameter in a single call.
-    /// If that fails, falls back to generating completions sequentially.
+    /// Generates N completions sequentially using the provided LLM provider.
     /// If fewer than N completions succeed, pads with the first completion.
     async fn generate_initial_completions(
         query: &str,
         system_prompt: &str,
         num_completions: usize,
-        client: &code_core::ModelClient,
+        provider: &dyn LLMProvider,
         fallback_enabled: bool,
     ) -> Result<(Vec<String>, usize, bool)> {
         let mut completions = Vec::new();
         let mut total_tokens = 0;
         let mut fallback_used = false;
 
-        // Build prompt for ModelClient
-        let user_prompt = query.to_string();
-        let mut prompt = code_core::Prompt::default();
-        prompt.input = vec![code_core::ResponseItem::Message {
-            id: None,
-            role: "user".to_string(),
-            content: vec![code_core::ContentItem::InputText { text: user_prompt }],
-        }];
-        prompt.base_instructions_override = Some(system_prompt.to_string());
-        prompt.set_log_tag("moa_phase1_batch");
-
-        // Try single batch call first (would use n=3 in OpenAI terms)
-        // For now, we generate sequentially for reliability
+        // Generate completions sequentially
         for i in 0..num_completions {
-            let mut single_prompt = prompt.clone();
-            single_prompt.set_log_tag(&format!("moa_phase1_completion_{}", i + 1));
-
-            match client.stream(&single_prompt).await {
-                Ok(mut stream) => {
-                    let mut completion = String::new();
-
-                    while let Some(event) = stream.next().await {
-                        match event {
-                            Ok(code_core::ResponseEvent::OutputTextDelta { delta, .. }) => {
-                                completion.push_str(&delta);
-                            }
-                            Ok(code_core::ResponseEvent::Completed { token_usage, .. }) => {
-                                if let Some(usage) = token_usage {
-                                    total_tokens += usage.output_tokens as usize;
-                                }
-                                break;
-                            }
-                            Err(e) => {
-                                return Err(crate::MarsError::ClientError(format!(
-                                    "Error generating completion {}: {}",
-                                    i + 1,
-                                    e
-                                )));
-                            }
-                            _ => {}
-                        }
-                    }
-
+            match provider
+                .complete(query, Some(system_prompt))
+                .await
+            {
+                Ok(completion) => {
                     if !completion.is_empty() {
+                        // Estimate tokens (rough heuristic: 4 chars per token)
+                        total_tokens += query.len() / 4 + completion.len() / 4;
                         completions.push(completion);
                     }
                 }
@@ -131,7 +96,7 @@ impl MoaAggregator {
         query: &str,
         completions: &[String],
         system_prompt: &str,
-        client: &code_core::ModelClient,
+        provider: &dyn LLMProvider,
     ) -> Result<(String, usize)> {
         if completions.len() < 3 {
             return Err(crate::MarsError::AggregationError(
@@ -151,41 +116,18 @@ impl MoaAggregator {
             query, completions[0], completions[1], completions[2]
         );
 
-        let mut prompt = code_core::Prompt::default();
-        prompt.input = vec![code_core::ResponseItem::Message {
-            id: None,
-            role: "user".to_string(),
-            content: vec![code_core::ContentItem::InputText {
-                text: critique_prompt,
-            }],
-        }];
-        prompt.base_instructions_override = Some(system_prompt.to_string());
-        prompt.set_log_tag("moa_phase2_critique");
-
-        let mut stream = client.stream(&prompt).await?;
-        let mut critique = String::new();
-        let mut token_count = 0;
-
-        while let Some(event) = stream.next().await {
-            match event? {
-                code_core::ResponseEvent::OutputTextDelta { delta, .. } => {
-                    critique.push_str(&delta);
-                }
-                code_core::ResponseEvent::Completed { token_usage, .. } => {
-                    if let Some(usage) = token_usage {
-                        token_count = usage.output_tokens as usize;
-                    }
-                    break;
-                }
-                _ => {}
-            }
-        }
+        let critique = provider
+            .complete(&critique_prompt, Some(system_prompt))
+            .await?;
 
         if critique.is_empty() {
             return Err(crate::MarsError::AggregationError(
                 "Failed to generate critique in MOA phase 2".to_string(),
             ));
         }
+
+        // Estimate tokens
+        let token_count = critique_prompt.len() / 4 + critique.len() / 4;
 
         Ok((critique, token_count))
     }
@@ -196,7 +138,7 @@ impl MoaAggregator {
         completions: &[String],
         critique: &str,
         system_prompt: &str,
-        client: &code_core::ModelClient,
+        provider: &dyn LLMProvider,
     ) -> Result<(String, usize)> {
         if completions.len() < 3 {
             return Err(crate::MarsError::AggregationError(
@@ -216,35 +158,9 @@ impl MoaAggregator {
             query, completions[0], completions[1], completions[2], critique
         );
 
-        let mut prompt = code_core::Prompt::default();
-        prompt.input = vec![code_core::ResponseItem::Message {
-            id: None,
-            role: "user".to_string(),
-            content: vec![code_core::ContentItem::InputText {
-                text: synthesis_prompt,
-            }],
-        }];
-        prompt.base_instructions_override = Some(system_prompt.to_string());
-        prompt.set_log_tag("moa_phase3_synthesis");
-
-        let mut stream = client.stream(&prompt).await?;
-        let mut synthesis = String::new();
-        let mut token_count = 0;
-
-        while let Some(event) = stream.next().await {
-            match event? {
-                code_core::ResponseEvent::OutputTextDelta { delta, .. } => {
-                    synthesis.push_str(&delta);
-                }
-                code_core::ResponseEvent::Completed { token_usage, .. } => {
-                    if let Some(usage) = token_usage {
-                        token_count = usage.output_tokens as usize;
-                    }
-                    break;
-                }
-                _ => {}
-            }
-        }
+        let synthesis = provider
+            .complete(&synthesis_prompt, Some(system_prompt))
+            .await?;
 
         if synthesis.is_empty() {
             return Err(crate::MarsError::AggregationError(
@@ -252,34 +168,39 @@ impl MoaAggregator {
             ));
         }
 
+        // Estimate tokens
+        let token_count = synthesis_prompt.len() / 4 + synthesis.len() / 4;
+
         Ok((synthesis, token_count))
     }
 
     /// Run the full MOA aggregation pipeline
+    ///
+    /// Supports any LLM provider via the LLMProvider trait, enabling multi-model aggregation.
     pub async fn run_moa(
         query: &str,
         system_prompt: &str,
         num_completions: usize,
         fallback_enabled: bool,
-        client: &code_core::ModelClient,
+        provider: &dyn LLMProvider,
     ) -> Result<(Solution, MoaMetadata)> {
         // Phase 1: Generate initial completions
         let (completions, phase1_tokens, fallback_used) = Self::generate_initial_completions(
             query,
             system_prompt,
             num_completions,
-            client,
+            provider,
             fallback_enabled,
         )
         .await?;
 
         // Phase 2: Generate critique
         let (critique, phase2_tokens) =
-            Self::generate_critique(query, &completions, system_prompt, client).await?;
+            Self::generate_critique(query, &completions, system_prompt, provider).await?;
 
         // Phase 3: Generate final synthesis
         let (final_answer, phase3_tokens) =
-            Self::generate_final_synthesis(query, &completions, &critique, system_prompt, client)
+            Self::generate_final_synthesis(query, &completions, &critique, system_prompt, provider)
                 .await?;
 
         // Calculate total tokens
