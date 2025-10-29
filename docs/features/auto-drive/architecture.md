@@ -545,6 +545,8 @@ Auto-Drive integrates with:
 
 ## Future Enhancements
 
+### Core Improvements
+
 Potential improvements to Auto-Drive architecture:
 
 1. **Distributed Execution**: Run multiple parallel action sequences
@@ -552,6 +554,32 @@ Potential improvements to Auto-Drive architecture:
 3. **Tool Integration**: Custom tool definitions for domain-specific tasks
 4. **Observability**: Enhanced tracing and debugging tools
 5. **Multi-Agent Coordination**: Collaborative agent workflows
+
+### Pub/Sub Systems for Multi-Agent Communication
+
+A critical enabler for distributed execution and multi-agent coordination is a publish-subscribe (pub/sub) messaging system that decouples sub-agents from each other, enabling asynchronous, scalable communication patterns.
+
+**Current Limitation**: Today, agents work in isolation and communicate through point-to-point callbacks and shared state. This limits parallelism and makes it difficult for agents to learn from each other's work.
+
+**Pub/Sub Solution**: Introducing a message-oriented event bus would enable:
+
+- **Agent Progress Broadcasting**: Sub-agents can publish their status, discoveries, and intermediate results to a shared event bus, with multiple subscribers (TUI, metrics collector, distributed tracer, other agents) consuming relevant events
+- **Strategy Sharing**: In MARS-style multi-agent systems, agents can broadcast discovered strategies or heuristics, allowing peer agents to incorporate successful approaches without blocking
+- **Work Coordination**: Agents can announce what they're working on, enabling collaborative systems to avoid duplicate effort and distribute work more intelligently
+- **Result Aggregation**: Multiple agents working on parallel tasks can publish results asynchronously, with an aggregator subscribing to compile final outputs
+
+**Evolution Path**: The system can evolve in two phases:
+
+- **Phase 1 - Local Coordination**: For single-node setups, lightweight **internal Rust-based event buses** using tokio's `broadcast` channels or libraries like `async-channel` provide low-latency, in-process pub/sub without external dependencies
+
+- **Phase 2 - Distributed Scaling**: As Auto-Drive scales to multi-node deployments, external **message brokers** enable geography-distributed agent coordination:
+  - **Apache Kafka**: Highly scalable distributed event streaming platform ideal for high-throughput data pipelines and durable event logs
+  - **RabbitMQ**: Feature-rich message broker with flexible routing patterns, persistence guarantees, and support for multiple messaging protocols
+  - **Apache Pulsar**: Modern distributed platform developed by Yahoo!, known for high scalability and multi-tenant capabilities
+  - **ActiveMQ**: Lightweight open-source broker with broad protocol support, suitable for smaller deployments
+  - **Redis**: Fast, simple pub/sub suitable for low-latency, non-persistent messaging in lightweight scenarios
+
+A pub/sub layer would also enhance observability by funneling all agent activities through typed events, enabling comprehensive tracing, metrics collection, and audit logging for complex multi-agent workflows.
 
 ## References
 
