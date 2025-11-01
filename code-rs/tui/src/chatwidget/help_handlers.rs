@@ -5,12 +5,7 @@ use crossterm::event::{KeyCode, KeyEvent};
 
 // Returns true if the key was handled by the help overlay (or toggled it closed).
 pub(super) fn handle_help_key(chat: &mut ChatWidget<'_>, key_event: KeyEvent) -> bool {
-    // If no help overlay, only intercept Ctrl+H to open it.
     if chat.help.overlay.is_none() {
-        if let KeyEvent { code: KeyCode::Char('h'), modifiers: crossterm::event::KeyModifiers::CONTROL, .. } = key_event {
-            chat.toggle_help_popup();
-            return true;
-        }
         return false;
     }
 
@@ -56,8 +51,8 @@ pub(super) fn handle_help_key(chat: &mut ChatWidget<'_>, key_event: KeyEvent) ->
             chat.request_redraw();
             true
         }
-        KeyCode::Esc | KeyCode::Char('h') => {
-            // Close on Esc or Ctrl+H
+        KeyCode::Esc => {
+            // Close on Esc
             chat.help.overlay = None;
             chat.request_redraw();
             true

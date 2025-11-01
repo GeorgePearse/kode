@@ -29,6 +29,7 @@ use code_tui::test_helpers::{
     AutoContinueModeFixture,
     ChatWidgetHarness,
 };
+use code_core::history::state::HistoryRecord;
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyEventState, KeyModifiers};
 use regex_lite::{Captures, Regex};
 use serde_json::json;
@@ -159,6 +160,46 @@ fn normalize_glyph(ch: char) -> char {
         '‐' | '‑' | '‒' | '–' | '—' | '―' => '-',
         other => other,
     }
+}
+
+#[test]
+fn help_command_popular_commands_on_demand() {
+    let mut harness = ChatWidgetHarness::new();
+
+    let has_popular_notice = |records: &[HistoryRecord]| {
+        records.iter().any(|record| {
+            if let HistoryRecord::PlainMessage(state) = record {
+                state.lines.iter().any(|line| {
+                    line.spans
+                        .iter()
+                        .any(|span| span.text == "Hello George:")
+                })
+            } else {
+                false
+            }
+        })
+    };
+
+    let initial_records = code_tui::test_helpers::history_records(&mut harness);
+    assert!(
+        !has_popular_notice(&initial_records),
+        "popular commands should not render until /help is invoked"
+    );
+
+    harness.trigger_help_command();
+    harness.send_key(make_key(KeyCode::Esc, KeyModifiers::NONE));
+
+    let records = code_tui::test_helpers::history_records(&mut harness);
+    assert!(
+        has_popular_notice(&records),
+        "popular commands notice should appear after /help command"
+    );
+
+    let after = normalize_output(render_chat_widget_to_vt100(&mut harness, 80, 24));
+    assert!(
+        after.contains("Hello George:"),
+        "rendered frame should include the popular commands notice"
+    );
 }
 
 fn normalize_timers(text: String) -> String {

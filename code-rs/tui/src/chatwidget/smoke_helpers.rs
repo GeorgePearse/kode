@@ -301,6 +301,11 @@ impl ChatWidgetHarness {
         self.chat.history_push_plain_state(state);
     }
 
+    pub fn trigger_help_command(&mut self) {
+        self.chat.handle_help_command();
+        self.flush_into_widget();
+    }
+
     pub fn push_background_event(&mut self, message: impl Into<String>) {
         let seq = self.next_helper_seq();
         self.handle_event(Event {

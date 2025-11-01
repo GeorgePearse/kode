@@ -665,7 +665,7 @@ impl App<'_> {
             }
         }
     }
-    
+
     /// Schedule a redraw after the specified duration.
     fn schedule_redraw_in(&self, duration: Duration) {
         self.frame_timer
@@ -1925,6 +1925,11 @@ impl App<'_> {
                     };
 
                     match command {
+                        SlashCommand::Help => {
+                            if let AppState::Chat { widget } = &mut self.app_state {
+                                widget.handle_help_command();
+                            }
+                        }
                         SlashCommand::Undo => {
                             if let AppState::Chat { widget } = &mut self.app_state {
                                 widget.handle_undo_command();

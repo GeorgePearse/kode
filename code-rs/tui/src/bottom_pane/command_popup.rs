@@ -30,6 +30,7 @@ pub(crate) struct CommandPopup {
     prompts: Vec<CustomPrompt>,
     state: ScrollState,
     subagents: Vec<String>,
+    force_show_all: bool,
 }
 
 impl CommandPopup {
@@ -45,6 +46,7 @@ impl CommandPopup {
             prompts: Vec::new(),
             state: ScrollState::new(),
             subagents: Vec::new(),
+            force_show_all: false,
         }
     }
 
@@ -96,11 +98,13 @@ impl CommandPopup {
             // Update the filter keeping the original case (commands are all
             // lower-case for now but this may change in the future).
             self.command_filter = cmd_token.to_string();
+            self.force_show_all = cmd_token.eq_ignore_ascii_case("help");
         } else {
             // The composer no longer starts with '/'. Reset the filter so the
             // popup shows the *full* command list if it is still displayed
             // for some reason.
             self.command_filter.clear();
+            self.force_show_all = false;
         }
 
         // Reset or clamp selected index based on new filtered list.
@@ -120,7 +124,11 @@ impl CommandPopup {
     /// paired with optional highlight indices and score. Sorted by ascending
     /// score, then by name for stability.
     fn filtered(&self) -> Vec<(CommandItem, Option<Vec<usize>>, i32)> {
-        let filter = self.command_filter.trim();
+        let filter = if self.force_show_all {
+            ""
+        } else {
+            self.command_filter.trim()
+        };
         let mut out: Vec<(CommandItem, Option<Vec<usize>>, i32)> = Vec::new();
         if filter.is_empty() {
             // Built-ins first, in presentation order.

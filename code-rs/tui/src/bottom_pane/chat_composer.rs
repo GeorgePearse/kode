@@ -1755,16 +1755,25 @@ impl ChatComposer {
         // (before the first space). This allows @-file completion for arguments
         // in commands like "/plan" and "/solve".
         let in_slash_head = self.is_cursor_in_slash_command_head();
+        let slash_token = if input_starts_with_slash {
+            let rest = first_line.strip_prefix('/').unwrap_or("");
+            let token = rest.trim_start();
+            token.split_whitespace().next().unwrap_or("")
+        } else {
+            ""
+        };
+        let wants_command_popup =
+            input_starts_with_slash && in_slash_head && slash_token.eq_ignore_ascii_case("help");
         match &mut self.active_popup {
             ActivePopup::Command(popup) => {
-                if input_starts_with_slash && in_slash_head {
+                if wants_command_popup {
                     popup.on_composer_text_change(first_line.to_string());
                 } else {
                     self.active_popup = ActivePopup::None;
                 }
             }
             _ => {
-                if input_starts_with_slash && in_slash_head {
+                if wants_command_popup {
                     let mut command_popup = CommandPopup::new_with_filter(self.using_chatgpt_auth);
                     // Load saved subagent commands to include in autocomplete (exclude built-ins)
                     if let Ok(cfg) = code_core::config::Config::load_with_cli_overrides(vec![], code_core::config::ConfigOverrides::default()) {
@@ -2192,8 +2201,8 @@ impl ChatComposer {
                         if !spans.is_empty() {
                             spans.push(Span::from("  •  ").style(label_style));
                         }
-                        spans.push(Span::from("Ctrl+H").style(key_hint_style));
-                        spans.push(Span::from(" help").style(label_style));
+                        spans.push(Span::from("/help").style(key_hint_style));
+                        spans.push(Span::from(" options").style(label_style));
                     }
                     spans
                 };

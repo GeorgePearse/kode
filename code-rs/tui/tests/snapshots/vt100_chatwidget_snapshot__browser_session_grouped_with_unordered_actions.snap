@@ -9,13 +9,6 @@ expression: output
 
 
 
- ★ Popular commands:
-   /settings - manage all settings in one place NEW
-   /auto - work autonomously on long tasks with Auto Drive UPDATED
-   /chrome - connect to your Chrome browser
-   /plan - create a comprehensive plan (multiple agents)
-   /code - perform a coding task (multiple agents)
-
  › Handle captcha gracefully
 
    +- Browser (headless): example.com

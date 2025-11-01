@@ -50,6 +50,7 @@ fn demo_command_enabled() -> bool {
 pub enum SlashCommand {
     // DO NOT ALPHA-SORT! Enum order is presentation order in the popup, so
     // more frequently used commands should be listed first.
+    Help,
     Browser,
     Chrome,
     New,
@@ -99,6 +100,7 @@ impl SlashCommand {
         match self {
             SlashCommand::Chrome => "connect to your Chrome browser",
             SlashCommand::Browser => "open internal browser",
+            SlashCommand::Help => "show keyboard shortcuts and slash commands",
             SlashCommand::Resume => "resume a past session for this folder",
             SlashCommand::Plan => "create a comprehensive plan (multiple agents)",
             SlashCommand::Solve => "solve a challenging problem (multiple agents)",

@@ -4141,8 +4141,7 @@ impl ChatWidget<'_> {
         // Seed footer access indicator based on current config
         new_widget.apply_access_mode_indicator_from_config();
         // Insert the welcome cell as top-of-first-request so future model output
-        // appears below it. Also insert the Popular commands immediately so users
-        // don't wait for MCP initialization to finish.
+        // appears below it.
         let mut w = new_widget;
         let auto_defaults = w.config.auto_drive.clone();
         w.auto_state.review_enabled = auto_defaults.review_enabled;
@@ -4163,19 +4162,10 @@ impl ChatWidget<'_> {
                     w.history_push_top_next_req(upgrade_cell);
                 }
             }
-            let notice_state = history_cell::new_popular_commands_notice(
-                false,
-                w.latest_upgrade_version.as_deref(),
-            );
-            let notice_key = w.next_req_key_top();
-            let _ = w.history_insert_plain_state_with_key(notice_state, notice_key, "prelude");
             if connecting_mcp {
                 // Render connecting status as a separate cell with standard gutter and spacing
                 w.history_push_top_next_req(history_cell::new_connecting_mcp_status());
             }
-            // Mark welcome as shown to avoid duplicating the Popular commands section
-            // when SessionConfigured arrives shortly after.
-            w.welcome_shown = true;
         } else {
             w.welcome_shown = true;
             w.insert_resume_placeholder();
@@ -7539,7 +7529,7 @@ impl ChatWidget<'_> {
         // Animation cleanup is now handled differently
     }
 
-    /// Replace the initial Popular Commands notice that includes
+    /// Replace the initial Hello George notice that includes
     /// the transient "Connecting MCP servers…" line with a version
     /// that omits it.
     fn remove_connecting_mcp_notice(&mut self) {
@@ -8685,6 +8675,41 @@ impl ChatWidget<'_> {
         }
 
         self.show_undo_snapshot_picker();
+    }
+
+    pub(crate) fn handle_help_command(&mut self) {
+        if self.help.overlay.is_some() {
+            self.toggle_help_popup();
+            return;
+        }
+
+        self.show_popular_commands_notice();
+        self.toggle_help_popup();
+    }
+
+    fn show_popular_commands_notice(&mut self) {
+        if let Some((idx, _)) = self
+            .history_cells
+            .iter()
+            .enumerate()
+            .find(|(_, cell)| {
+                cell.kind() == crate::history_cell::HistoryCellType::Notice
+                    && cell
+                        .display_lines()
+                        .iter()
+                        .any(|line| {
+                            line.spans.iter().any(|span| span.content.as_ref() == "Hello George:")
+                        })
+            })
+        {
+            self.history_remove_at(idx);
+        }
+
+        let notice_state = history_cell::new_popular_commands_notice(
+            false,
+            self.latest_upgrade_version.as_deref(),
+        );
+        self.history_push_plain_state(notice_state);
     }
 
     fn show_undo_snapshots_disabled(&mut self) {
